@@ -98,15 +98,6 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="QUÉT CÁC THIẾT BỊ LÂN CẬN"
-            android:id="@+id/discover"
-            android:layout_below="@+id/off"
-            android:layout_toRightOf="@+id/checkboxLED1"
-            android:layout_toEndOf="@+id/checkboxLED1" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="Điểm danh"
             android:id="@+id/listStudent"
             android:layout_below="@+id/off"

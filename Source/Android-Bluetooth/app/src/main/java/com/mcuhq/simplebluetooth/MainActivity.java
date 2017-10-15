@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
         mReadBuffer = (TextView) findViewById(R.id.readBuffer);
         mScanBtn = (Button)findViewById(R.id.scan);
         mOffBtn = (Button)findViewById(R.id.off);
-        mDiscoverBtn = (Button)findViewById(R.id.discover);
         listStudent = (Button)findViewById(R.id.listStudent);
         mLED1 = (CheckBox)findViewById(R.id.checkboxLED1);
 
@@ -157,13 +156,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            mDiscoverBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    discover(v);
-                }
-            });
-
             listStudent.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
@@ -208,25 +200,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Bluetooth đã tắt", Toast.LENGTH_SHORT).show();
     }
 
-    private void discover(View view){
-        // Check if the device is already discovering
-        if(mBTAdapter.isDiscovering()){
-            mBTAdapter.cancelDiscovery();
-            Toast.makeText(getApplicationContext(),"Dừng quét",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            if(mBTAdapter.isEnabled()) {
-                mBTArrayAdapter.clear(); // clear items
-                mBTAdapter.startDiscovery();
-                Toast.makeText(getApplicationContext(), "Bắt đầu quét", Toast.LENGTH_SHORT).show();
-                registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "Bluetooth chưa được bật", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     final BroadcastReceiver blReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -238,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
                     mDevicesListView.setItemChecked(CheckStudent(device.getAddress()), true);
 
                 // add the name to the list
-                mBTArrayAdapter.add(device.getName() + "   " + device.getAddress());
-                mBTArrayAdapter.notifyDataSetChanged();
+                //mBTArrayAdapter.add(device.getName() + "   " + device.getAddress());
+                //mBTArrayAdapter.notifyDataSetChanged();
             }
         }
     };

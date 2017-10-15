@@ -49,8 +49,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         int count = this.getNotesCount();
         if(count ==0 ) {
             Students note1 = new Students("13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4");
-            Students note2 = new Students("13520222", "Phan Thanh Lam", null);
-            Students note3 = new Students("13520222", "Lê Văn Hoài", null);
+            Students note2 = new Students("13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A");
+            Students note3 = new Students("13520290", "Lê Văn Hoài", "");
             this.addStudent(note1);
             this.addStudent(note2);
             this.addStudent(note3);
