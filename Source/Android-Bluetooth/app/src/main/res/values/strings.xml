@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Điểm Danh Bluetooth</string>
+    <string name="del">Xóa</string>
+    <string name="update">Sửa</string>
 </resources>

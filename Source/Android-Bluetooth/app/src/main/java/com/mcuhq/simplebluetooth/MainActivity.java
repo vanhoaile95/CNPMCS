@@ -21,7 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,15 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
     // GUI Components
     private TextView mBluetoothStatus;
-    private TextView mReadBuffer;
-    private Button mScanBtn;
-    private Button mOffBtn;
-    private Button mDiscoverBtn;
+    private Switch bluetooth;
+    private Button dssv;
     private Button listStudent;
     private BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
-    private CheckBox mLED1;
 
     private final String TAG = MainActivity.class.getSimpleName();
     private Handler mHandler; // Our main handler that will receive callback notifications
@@ -79,25 +78,23 @@ public class MainActivity extends AppCompatActivity {
         numStd=mDbHelper.getNotesCount();
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetoothStatus);
-        mReadBuffer = (TextView) findViewById(R.id.readBuffer);
-        mScanBtn = (Button)findViewById(R.id.scan);
-        mOffBtn = (Button)findViewById(R.id.off);
+        bluetooth = (Switch) findViewById(R.id.switch1);
+        dssv = (Button)findViewById(R.id.dssv);
         listStudent = (Button)findViewById(R.id.listStudent);
-        mLED1 = (CheckBox)findViewById(R.id.checkboxLED1);
 
         mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
         mDevicesListView = (ListView)findViewById(R.id.devicesListView);
         mDevicesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        /*mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CheckedTextView v = (CheckedTextView) view;
                 boolean currentCheck = v.isChecked();
             }
-        });
+        });*/
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
 
         // Ask for location permission if not already allowed
@@ -114,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    mReadBuffer.setText(readMessage);
                 }
 
                 if(msg.what == CONNECTING_STATUS){
@@ -131,46 +127,39 @@ public class MainActivity extends AppCompatActivity {
             mBluetoothStatus.setText("Status: Bluetooth not found");
             Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
         }
-        else {
 
-            mLED1.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
-                        mConnectedThread.write("1");
+        bluetooth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
+                if (bChecked) {
+                    bluetoothOn();
+                } else {
+                    bluetoothOff();
                 }
-            });
+            }
+        });
 
+        listStudent.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                listStudent(v);
+            }
+        });
 
-            mScanBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bluetoothOn(v);
-                }
-            });
-
-            mOffBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    bluetoothOff(v);
-                }
-            });
-
-            listStudent.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    listStudent(v);
-                }
-            });
-        }
+        dssv.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                dssv(v);
+            }
+        });
     }
 
-    private void bluetoothOn(View view){
+    private void bluetoothOn(){
         if (!mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            mBluetoothStatus.setText("Bluetooth enabled");
-            Toast.makeText(getApplicationContext(),"Bluetooth đã bật",Toast.LENGTH_SHORT).show();
+            mBluetoothStatus.setText("Đã bật Bluetooth");
+            Toast.makeText(getApplicationContext(),"Đã bật Bluetooth",Toast.LENGTH_SHORT).show();
 
         }
         else{
@@ -187,16 +176,16 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-                mBluetoothStatus.setText("Enabled");
+                mBluetoothStatus.setText("Đã bật");
             }
             else
-                mBluetoothStatus.setText("Disabled");
+                mBluetoothStatus.setText("Đã tắt");
         }
     }
 
-    private void bluetoothOff(View view){
+    private void bluetoothOff(){
         mBTAdapter.disable(); // turn off
-        mBluetoothStatus.setText("Bluetooth disabled");
+        mBluetoothStatus.setText("Bluetooth đã tắt");
         Toast.makeText(getApplicationContext(),"Bluetooth đã tắt", Toast.LENGTH_SHORT).show();
     }
 
@@ -238,6 +227,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Bluetooth chưa được bật", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void dssv(View view){
+        Intent i = new Intent(MainActivity.this, Dssv.class);
+        MainActivity.this.startActivity(i);
     }
 
     private int CheckStudent(String str)

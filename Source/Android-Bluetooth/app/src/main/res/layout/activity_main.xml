@@ -15,42 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Toggle LED"
-            android:id="@+id/checkboxLED1"
-            android:layout_marginTop="10dp"
-            android:checked="false"
-            android:layout_alignLeft="@+id/bluetoothStatus"
-            android:layout_alignStart="@+id/bluetoothStatus"
-            android:scaleX="1.7"
-            android:scaleY="1.7"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal" />
-
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content">
-            <TextView
+
+            <Switch
+                android:id="@+id/switch1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:text="RX:"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="&lt;Read Buffer>"
-                android:id="@+id/readBuffer"
-                android:layout_centerHorizontal="true" />
+                android:text="Bluetooth    " />
+
         </LinearLayout>
 
         <LinearLayout
@@ -81,19 +57,11 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="BẬT Bluetooth"
-            android:id="@+id/scan"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/off" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tắt Bluetooth"
-            android:id="@+id/off"
-            android:layout_alignBottom="@+id/scan"
-            android:layout_toEndOf="@+id/PairedBtn"
-            android:layout_toRightOf="@+id/PairedBtn" />
+            android:text="Danh sách sinh viên"
+            android:id="@+id/dssv"
+            android:layout_below="@+id/off"
+            android:layout_toRightOf="@+id/checkboxLED1"
+            android:layout_toEndOf="@+id/checkboxLED1" />
 
         <Button
             android:layout_width="match_parent"
