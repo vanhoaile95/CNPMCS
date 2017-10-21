@@ -64,18 +64,15 @@ public class MainActivity extends AppCompatActivity {
     private final static int CONNECTING_STATUS = 3; // used in bluetooth handler to identify message status
 
     List<Students> listStd = new ArrayList<Students>();
-    int numStd;
+    FeedReaderDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FeedReaderDbHelper mDbHelper = new FeedReaderDbHelper(this);
+        mDbHelper = new FeedReaderDbHelper(this);
         mDbHelper.createDefaultStudents();
-        List<Students> list = mDbHelper.getAllNotes();
-        listStd.addAll(list);
-        numStd=mDbHelper.getNotesCount();
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetoothStatus);
         bluetooth = (Switch) findViewById(R.id.switch1);
@@ -207,9 +204,15 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void listStudent(View view){
+        listStd.clear();
         mBTArrayAdapter.clear(); // clear items
-        for(int i=0;i<numStd;i++) {
+
+        List<Students> list = mDbHelper.getAllNotes();
+        listStd.addAll(list);
+
+        for(int i=0;i<listStd.size();i++) {
             mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
+            mDevicesListView.setItemChecked(i, false);
         }
         mBTArrayAdapter.notifyDataSetChanged();
 
@@ -230,6 +233,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dssv(View view){
+        listStd.clear();
+        mBTArrayAdapter.clear();
+
         Intent i = new Intent(MainActivity.this, Dssv.class);
         MainActivity.this.startActivity(i);
     }
@@ -237,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
     private int CheckStudent(String str)
     {
         int ck = -1;
-        for(int i=0;i<numStd;i++) {
+        for(int i=0;i<listStd.size();i++) {
             if(str.equals(listStd.get(i).getMac()))
             {
                 ck = i;

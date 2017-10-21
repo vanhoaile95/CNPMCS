@@ -48,9 +48,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void createDefaultStudents()  {
         int count = this.getNotesCount();
         if(count ==0 ) {
-            Students note1 = new Students("13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4");
-            Students note2 = new Students("13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A");
-            Students note3 = new Students("13520290", "Lê Văn Hoài", "");
+            Students note1 = new Students(1, "13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4");
+            Students note2 = new Students(2, "13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A");
+            Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "123456");
             this.addStudent(note1);
             this.addStudent(note2);
             this.addStudent(note3);
@@ -64,6 +64,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
+        values.put(FeedEntry.COLUMN_ID, std.getId());
         values.put(FeedEntry.COLUMN_MSSV, std.getMssv());
         values.put(FeedEntry.COLUMN_NAME, std.getName());
         values.put(FeedEntry.COLUMN_MAC, std.getMac());
@@ -131,24 +132,26 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     }
 
 
-    public int updateStudent(Students note) {
+    public void updateStudent(Students note) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(FeedEntry.COLUMN_MSSV, note.getMssv());
         values.put(FeedEntry.COLUMN_NAME, note.getName());
+        values.put(FeedEntry.COLUMN_MAC, note.getMac());
 
-        // updating row
-        return db.update(FeedEntry.TABLE_NAME, values, FeedEntry.COLUMN_ID + " = ?",
+        db.update(FeedEntry.TABLE_NAME, values, FeedEntry.COLUMN_ID+ " = ?",
                 new String[]{String.valueOf(note.getId())});
+
+        db.close();
     }
 
-    public void deleteStudent(Students note) {
+    public void deleteStudent(int id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(FeedEntry.TABLE_NAME, FeedEntry.COLUMN_ID + " = ?",
-                new String[] { String.valueOf(note.getId()) });
+                new String[] { String.valueOf(id) });
         db.close();
     }
 }

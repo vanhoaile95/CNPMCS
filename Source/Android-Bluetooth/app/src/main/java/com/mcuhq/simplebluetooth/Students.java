@@ -36,6 +36,15 @@ public class Students{
         this.active=true;
     }
 
+    public Students(int id, String mssv, String name, String mac)
+    {
+        this.id = id;
+        this.mssv=mssv;
+        this.name=name;
+        this.mac = mac;
+        this.active=true;
+    }
+
     public int getId() {
         return id;
     }
