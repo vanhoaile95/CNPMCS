@@ -42,7 +42,7 @@ public class Students{
         this.mssv=mssv;
         this.name=name;
         this.mac = mac;
-        this.active=true;
+        this.active=false;
     }
 
     public int getId() {

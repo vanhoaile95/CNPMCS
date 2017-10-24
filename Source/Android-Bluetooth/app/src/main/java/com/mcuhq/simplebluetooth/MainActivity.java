@@ -14,6 +14,8 @@ import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -42,13 +45,16 @@ import com.mcuhq.simplebluetooth.FeedReaderDbHelper;
 public class MainActivity extends AppCompatActivity {
 
     // GUI Components
-    private TextView mBluetoothStatus;
-    private Switch bluetooth;
+    private TextView status;
+    private Switch diemDanhThuCong;
     private Button dssv;
     private Button listStudent;
     private BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
+
+    //Search
+    private EditText editMsssv;
 
     private final String TAG = MainActivity.class.getSimpleName();
     private Handler mHandler; // Our main handler that will receive callback notifications
@@ -57,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
 
-
     // #defines for identifying shared types between calling functions
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
     private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
@@ -65,17 +70,22 @@ public class MainActivity extends AppCompatActivity {
 
     List<Students> listStd = new ArrayList<Students>();
     FeedReaderDbHelper mDbHelper;
+    int numStudent;
+    boolean manual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        manual=false;
+        editMsssv = (EditText)findViewById(R.id.editMssv);
+
         mDbHelper = new FeedReaderDbHelper(this);
         mDbHelper.createDefaultStudents();
 
-        mBluetoothStatus = (TextView)findViewById(R.id.bluetoothStatus);
-        bluetooth = (Switch) findViewById(R.id.switch1);
+        status = (TextView)findViewById(R.id.status);
+        diemDanhThuCong = (Switch) findViewById(R.id.manual);
         dssv = (Button)findViewById(R.id.dssv);
         listStudent = (Button)findViewById(R.id.listStudent);
 
@@ -84,15 +94,32 @@ public class MainActivity extends AppCompatActivity {
 
         mDevicesListView = (ListView)findViewById(R.id.devicesListView);
         mDevicesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        /*mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CheckedTextView v = (CheckedTextView) view;
-                boolean currentCheck = v.isChecked();
-            }
-        });*/
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+        mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(!manual) {
+                    if (!listStd.get(i).isActive())
+                        mDevicesListView.setItemChecked(i, false);
+                    else
+                        mDevicesListView.setItemChecked(i, true);
+                }
+                else
+                {
+                    if (!listStd.get(i).isActive()) {
+                        numStudent++;
+                        status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
+
+                        mDevicesListView.setItemChecked(i, true);
+                        listStd.get(i).setActive(true);
+                    }
+                    else {
+                        mDevicesListView.setItemChecked(i, true);
+                    }
+                }
+            }
+        });
+
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -110,28 +137,28 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                if(msg.what == CONNECTING_STATUS){
+                /*if(msg.what == CONNECTING_STATUS){
                     if(msg.arg1 == 1)
                         mBluetoothStatus.setText("Connected to Device: " + (String)(msg.obj));
                     else
                         mBluetoothStatus.setText("Connection Failed");
-                }
+                }*/
             }
         };
 
-        if (mBTArrayAdapter == null) {
+        /*if (mBTArrayAdapter == null) {
             // Device does not support Bluetooth
             mBluetoothStatus.setText("Status: Bluetooth not found");
             Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
-        bluetooth.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        diemDanhThuCong.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
                 if (bChecked) {
-                    bluetoothOn();
+                    manual=true;
                 } else {
-                    bluetoothOff();
+                    manual=false;
                 }
             }
         });
@@ -149,15 +176,34 @@ public class MainActivity extends AppCompatActivity {
                 dssv(v);
             }
         });
+
+        editMsssv.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                mBTArrayAdapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        status.setText("Có mặt 0/0 sinh viên");
+        numStudent = 0;
     }
 
     private void bluetoothOn(){
         if (!mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            mBluetoothStatus.setText("Đã bật Bluetooth");
+            //mBluetoothStatus.setText("Đã bật Bluetooth");
             Toast.makeText(getApplicationContext(),"Đã bật Bluetooth",Toast.LENGTH_SHORT).show();
-
         }
         else{
             Toast.makeText(getApplicationContext(),"Bluetooth đã được bật", Toast.LENGTH_SHORT).show();
@@ -173,16 +219,17 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-                mBluetoothStatus.setText("Đã bật");
+                //mBluetoothStatus.setText("Đã bật");
             }
-            else
-                mBluetoothStatus.setText("Đã tắt");
+            else {
+                //mBluetoothStatus.setText("Đã tắt");
+            }
         }
     }
 
     private void bluetoothOff(){
         mBTAdapter.disable(); // turn off
-        mBluetoothStatus.setText("Bluetooth đã tắt");
+        //mBluetoothStatus.setText("Bluetooth đã tắt");
         Toast.makeText(getApplicationContext(),"Bluetooth đã tắt", Toast.LENGTH_SHORT).show();
     }
 
@@ -193,17 +240,20 @@ public class MainActivity extends AppCompatActivity {
             if(BluetoothDevice.ACTION_FOUND.equals(action)){
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
 
-                if(CheckStudent(device.getAddress())!=-1)
-                    mDevicesListView.setItemChecked(CheckStudent(device.getAddress()), true);
-
-                // add the name to the list
-                //mBTArrayAdapter.add(device.getName() + "   " + device.getAddress());
-                //mBTArrayAdapter.notifyDataSetChanged();
+                if(CheckStudent(device.getAddress())!=-1) {
+                    int check = CheckStudent(device.getAddress());
+                    mDevicesListView.setItemChecked(check, true);
+                    listStd.get(check).setActive(true);
+                    numStudent++;
+                    status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
+                }
             }
         }
     };
 
     private void listStudent(View view){
+        status.setText("Có mặt 0/0 sinh viên");
+        numStudent = 0;
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
 
@@ -211,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         listStd.addAll(list);
 
         for(int i=0;i<listStd.size();i++) {
+            listStd.get(i).setActive(false);
             mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
             mDevicesListView.setItemChecked(i, false);
         }

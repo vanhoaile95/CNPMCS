@@ -11,7 +11,10 @@
         android:layout_gravity="center"
         android:ems="10"
         android:hint="Mã số sinh viên"
-        android:inputType="number" />
+        android:inputType="number"
+        android:selectAllOnFocus="false"
+        android:maxLength="8"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/name"
@@ -28,7 +31,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:ems="10"
-        android:hint="Địa chỉ mac bluetooth"
+        android:hint="Địa chỉ bluetooth 1"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/mac2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:hint="Địa chỉ bluetooth 2"
         android:inputType="text" />
 
     <Button
