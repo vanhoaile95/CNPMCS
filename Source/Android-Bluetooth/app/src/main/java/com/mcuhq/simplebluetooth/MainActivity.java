@@ -36,15 +36,19 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 import com.mcuhq.simplebluetooth.FeedReaderDbHelper;
 
+import org.w3c.dom.Text;
+
 public class MainActivity extends AppCompatActivity {
 
     // GUI Components
+    private TextView today;
     private TextView status;
     private Switch diemDanhThuCong;
     private Button dssv;
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     FeedReaderDbHelper mDbHelper;
     int numStudent;
     boolean manual;
+    String strToday;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
         mDbHelper = new FeedReaderDbHelper(this);
         mDbHelper.createDefaultStudents();
+        List<Students> list = mDbHelper.getAllNotes();
+        listStd.addAll(list);
 
+        today = (TextView)findViewById(R.id.today);
         status = (TextView)findViewById(R.id.status);
         diemDanhThuCong = (Switch) findViewById(R.id.manual);
         dssv = (Button)findViewById(R.id.dssv);
@@ -194,7 +202,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        status.setText("Có mặt 0/0 sinh viên");
+        status.setText("Có mặt 0/" + String.valueOf(listStd.size()) + " sinh viên");
+
+        //Today is a good day
+        Calendar calendar = Calendar.getInstance();
+        strToday = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+ "-" +String.valueOf(calendar.get(Calendar.MONTH) + 1) + "-" +
+                String.valueOf(calendar.get(Calendar.YEAR));
+        today.setText(strToday);
+
         numStudent = 0;
     }
 
@@ -252,13 +267,13 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void listStudent(View view){
-        status.setText("Có mặt 0/0 sinh viên");
         numStudent = 0;
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
 
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
+        status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
 
         for(int i=0;i<listStd.size();i++) {
             listStd.get(i).setActive(false);

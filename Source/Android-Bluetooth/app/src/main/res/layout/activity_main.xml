@@ -24,7 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
-                android:text="Trạng thái:"
+                android:id="@+id/today"
+                android:text="11-11-2017"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textStyle="bold" />
