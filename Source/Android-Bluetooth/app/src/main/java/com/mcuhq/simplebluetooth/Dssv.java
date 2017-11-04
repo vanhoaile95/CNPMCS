@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by chuon on 10/17/2017.
+ * Created by chuong on 10/17/2017.
  */
 
 public class Dssv extends AppCompatActivity {
@@ -48,13 +48,6 @@ public class Dssv extends AppCompatActivity {
         listStudent = (ListView)findViewById(R.id.listStudent);
         listStudent.setAdapter(arrStudent);
         registerForContextMenu(listStudent);
-        /*listStudent.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.showContextMenu();
-            }
-        });*/
 
         LoadData();
     }
@@ -121,13 +114,15 @@ public class Dssv extends AppCompatActivity {
 
         final EditText name = (EditText)mView.findViewById(R.id.name);
         final EditText mssv = (EditText)mView.findViewById(R.id.mssv);
-        final EditText mac = (EditText)mView.findViewById(R.id.mac);
+        final EditText mac1 = (EditText)mView.findViewById(R.id.mac1);
+        final EditText mac2 = (EditText)mView.findViewById(R.id.mac2);
 
         if(type==1)
         {
             name.setText(listStd.get(pos).getName());
             mssv.setText(listStd.get(pos).getMssv());
-            mac.setText(listStd.get(pos).getMac());
+            mac1.setText(listStd.get(pos).getMac1());
+            mac2.setText(listStd.get(pos).getMac2());
         }
 
         Button btnOk = (Button)mView.findViewById(R.id.ok);
@@ -137,11 +132,13 @@ public class Dssv extends AppCompatActivity {
 
                 if(!mssv.getText().toString().isEmpty() && !name.getText().toString().isEmpty()) {
                     if (type == 0) {
-                        Students std = new Students(listStd.get(listStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString(), mac.getText().toString());
+                        Students std = new Students(listStd.get(listStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString()
+                                , mac1.getText().toString(), mac2.getText().toString());
                         mDbHelper.addStudent(std);
                         Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                     } else {
-                        Students std = new Students(listStd.get(pos).getId(), mssv.getText().toString(), name.getText().toString(), mac.getText().toString());
+                        Students std = new Students(listStd.get(pos).getId(), mssv.getText().toString(), name.getText().toString()
+                                , mac1.getText().toString(), mac2.getText().toString());
                         mDbHelper.updateStudent(std);
                         Toast.makeText(getApplicationContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                     }

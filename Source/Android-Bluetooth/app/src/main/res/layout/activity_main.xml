@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
                 android:id="@+id/today"
-                android:text="11-11-2017"
+                android:text="11-11-2017 "
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textStyle="bold" />
@@ -39,6 +39,17 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:id="@+id/count"
+                android:text="Điểm danh lần: 1"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
         <Button
@@ -47,11 +58,24 @@
             android:text="Danh sách sinh viên"
             android:id="@+id/dssv" />
 
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Điểm danh"
-            android:id="@+id/listStudent" />
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/listStudent"
+                android:layout_width="216dp"
+                android:layout_height="wrap_content"
+                android:text="Điểm danh" />
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lưu kết quả" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

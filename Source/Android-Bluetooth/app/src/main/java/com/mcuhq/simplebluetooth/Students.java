@@ -1,7 +1,7 @@
 package com.mcuhq.simplebluetooth;
 
 /**
- * Created by chuon on 10/9/2017.
+ * Created by chuong on 10/9/2017.
  */
 
 public class Students{
@@ -9,7 +9,8 @@ public class Students{
     private int id;
     private String mssv;
     private String name;
-    private String mac;
+    private String mac1;
+    private String mac2;
 
     private boolean active;
 
@@ -28,20 +29,13 @@ public class Students{
         this.name=name;
     }
 
-    public Students(String mssv, String name, String mac)
-    {
-        this.mssv=mssv;
-        this.name=name;
-        this.mac = mac;
-        this.active=true;
-    }
-
-    public Students(int id, String mssv, String name, String mac)
+    public Students(int id, String mssv, String name, String mac1, String mac2)
     {
         this.id = id;
         this.mssv=mssv;
         this.name=name;
-        this.mac = mac;
+        this.mac1 = mac1;
+        this.mac2 = mac2;
         this.active=false;
     }
 
@@ -77,11 +71,19 @@ public class Students{
         this.active = active;
     }
 
-    public String getMac() {
-        return mac;
+    public String getMac1() {
+        return mac1;
     }
 
-    public void setMac(String mac) {
-        this.mac = mac;
+    public void setMac1(String mac) {
+        this.mac1 = mac;
+    }
+
+    public String getMac2() {
+        return mac2;
+    }
+
+    public void setMac2(String mac) {
+        this.mac2 = mac;
     }
 }

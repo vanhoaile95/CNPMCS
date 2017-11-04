@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by chuon on 10/9/2017.
+ * Created by chuong on 10/9/2017.
  */
 
 public class FeedReaderDbHelper extends SQLiteOpenHelper {
@@ -23,8 +23,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
                     FeedEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
                     FeedEntry.COLUMN_MSSV + " TEXT," +
-                    FeedEntry.COLUMN_NAME+ " TEXT," +
-                    FeedEntry.COLUMN_MAC + " TEXT)";
+                    FeedEntry.COLUMN_NAME + " TEXT," +
+                    FeedEntry.COLUMN_MAC1 + " TEXT," +
+                    FeedEntry.COLUMN_MAC2 + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
@@ -48,9 +49,9 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void createDefaultStudents()  {
         int count = this.getNotesCount();
         if(count ==0 ) {
-            Students note1 = new Students(1, "13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4");
-            Students note2 = new Students(2, "13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A");
-            Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "123456");
+            Students note1 = new Students(1, "13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4", "Vlxx.tv");
+            Students note2 = new Students(2, "13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A","");
+            Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "123456","");
             this.addStudent(note1);
             this.addStudent(note2);
             this.addStudent(note3);
@@ -67,7 +68,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         values.put(FeedEntry.COLUMN_ID, std.getId());
         values.put(FeedEntry.COLUMN_MSSV, std.getMssv());
         values.put(FeedEntry.COLUMN_NAME, std.getName());
-        values.put(FeedEntry.COLUMN_MAC, std.getMac());
+        values.put(FeedEntry.COLUMN_MAC1, std.getMac1());
+        values.put(FeedEntry.COLUMN_MAC2, std.getMac2());
         db.insert(FeedEntry.TABLE_NAME, null, values);
 
         db.close();
@@ -106,7 +108,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                 note.setId(Integer.parseInt(cursor.getString(0)));
                 note.setMssv(cursor.getString(1));
                 note.setName(cursor.getString(2));
-                note.setMac(cursor.getString(3));
+                note.setMac1(cursor.getString(3));
+                note.setMac2(cursor.getString(4));
 
                 // Thêm vào danh sách.
                 noteList.add(note);
@@ -139,7 +142,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(FeedEntry.COLUMN_MSSV, note.getMssv());
         values.put(FeedEntry.COLUMN_NAME, note.getName());
-        values.put(FeedEntry.COLUMN_MAC, note.getMac());
+        values.put(FeedEntry.COLUMN_MAC1, note.getMac1());
+        values.put(FeedEntry.COLUMN_MAC2, note.getMac2());
 
         db.update(FeedEntry.TABLE_NAME, values, FeedEntry.COLUMN_ID+ " = ?",
                 new String[]{String.valueOf(note.getId())});

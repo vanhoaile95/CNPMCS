@@ -3,7 +3,7 @@ package com.mcuhq.simplebluetooth;
 import android.provider.BaseColumns;
 
 /**
- * Created by chuon on 10/9/2017.
+ * Created by chuong on 10/9/2017.
  */
 
 public final class FeedReaderContract {
@@ -17,6 +17,7 @@ public final class FeedReaderContract {
         public static final String COLUMN_ID = "Id";
         public static final String COLUMN_MSSV = "Mssv";
         public static final String COLUMN_NAME = "Name";
-        public static final String COLUMN_MAC = "Mac";
+        public static final String COLUMN_MAC1 = "Mac1";
+        public static final String COLUMN_MAC2 = "Mac2";
     }
 }

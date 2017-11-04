@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
     // GUI Components
     private TextView today;
     private TextView status;
+    private TextView count;
     private Switch diemDanhThuCong;
     private Button dssv;
     private Button listStudent;
+    private Button btnSave;
     private BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
@@ -77,11 +82,16 @@ public class MainActivity extends AppCompatActivity {
     int numStudent;
     boolean manual;
     String strToday;
+    int countValue;
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        countValue = sharedPref.getInt("Count", 1);
 
         manual=false;
         editMsssv = (EditText)findViewById(R.id.editMssv);
@@ -91,11 +101,13 @@ public class MainActivity extends AppCompatActivity {
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
 
+        count = (TextView)findViewById(R.id.count);
         today = (TextView)findViewById(R.id.today);
         status = (TextView)findViewById(R.id.status);
         diemDanhThuCong = (Switch) findViewById(R.id.manual);
         dssv = (Button)findViewById(R.id.dssv);
         listStudent = (Button)findViewById(R.id.listStudent);
+        btnSave = (Button)findViewById(R.id.save);
 
         mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
@@ -171,6 +183,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Lưu kết quả điểm danh lần " + String.valueOf(countValue)
+                        + " thành công",Toast.LENGTH_SHORT).show();
+
+                countValue++;
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("Count", countValue);
+                editor.commit();
+                count.setText("Điểm danh lần: " + String.valueOf(countValue));
+            }
+        });
+
         listStudent.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -203,14 +229,36 @@ public class MainActivity extends AppCompatActivity {
         });
 
         status.setText("Có mặt 0/" + String.valueOf(listStd.size()) + " sinh viên");
+        count.setText("Điểm danh lần: " + String.valueOf(countValue));
 
         //Today is a good day
         Calendar calendar = Calendar.getInstance();
         strToday = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+ "-" +String.valueOf(calendar.get(Calendar.MONTH) + 1) + "-" +
-                String.valueOf(calendar.get(Calendar.YEAR));
+                String.valueOf(calendar.get(Calendar.YEAR) + " ");
         today.setText(strToday);
 
         numStudent = 0;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);//Menu Resource, Menu
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.importExcel:
+                Toast.makeText(getApplicationContext(),"Nhập excel",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.exportExcel:
+                Toast.makeText(getApplicationContext(),"Xuất excel",Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void bluetoothOn(){
@@ -310,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
     {
         int ck = -1;
         for(int i=0;i<listStd.size();i++) {
-            if(str.equals(listStd.get(i).getMac()))
+            if(str.equals(listStd.get(i).getMac1()) || str.equals(listStd.get(i).getMac2()))
             {
                 ck = i;
             }
