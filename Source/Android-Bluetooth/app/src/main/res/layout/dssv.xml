@@ -10,7 +10,7 @@
         android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thêm Sinh Viên" />
+        android:text="@string/addStudent" />
 
     <ListView
         android:layout_width="match_parent"

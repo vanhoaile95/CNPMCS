@@ -55,7 +55,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Danh sách sinh viên"
+            android:text="@string/listStudent"
             android:id="@+id/dssv" />
 
         <LinearLayout
@@ -66,13 +66,13 @@
                 android:id="@+id/listStudent"
                 android:layout_width="216dp"
                 android:layout_height="wrap_content"
-                android:text="Điểm danh" />
+                android:text="@string/diemdanh" />
 
             <Button
                 android:id="@+id/save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lưu kết quả" />
+                android:text="@string/save" />
 
         </LinearLayout>
 
@@ -86,14 +86,14 @@
                 android:layout_width="131dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Nhập mã số..."
+                android:hint="@string/inputId"
                 android:inputType="number"
                 android:maxLength="8"/>
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  | Điểm danh thủ công     "
+                android:text="@string/manual"
                 android:textSize="15dp"
                 android:id="@+id/manual"/>
 

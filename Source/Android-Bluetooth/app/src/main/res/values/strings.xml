@@ -2,4 +2,26 @@
     <string name="app_name">Điểm Danh Bluetooth</string>
     <string name="del">Xóa</string>
     <string name="update">Sửa</string>
+    <string name="listStudent">Danh sách sinh viên</string>
+    <string name="diemdanh">Điểm danh</string>
+    <string name="save">Lưu kết quả</string>
+    <string name="inputId">Nhập mã số...</string>
+    <string name="manual">  | Điểm danh thủ công     </string>
+
+    <string name="id">Mã số sinh viên</string>
+    <string name="name">Tên</string>
+    <string name="mac1">Địa chỉ bluetooth 1</string>
+    <string name="mac2">Địa chỉ bluetooth 2</string>
+    <string name="ok">OK</string>
+
+    <string name="addStudent">Thêm Sinh Viên</string>
+
+    <string name="importExcel">Nhập từ file excel</string>
+    <string name="exportExcel">Xuất ra file excel</string>
+
+    <string name="saveNotif">Vui lòng điểm danh trước khi lưu</string>
+    <string name="saveSuccess">Lưu kết quả điểm danh lần %1$d thành công</string>
+    <string name="count">Điểm danh lần: %1$d</string>
+    <string name="numStudent">Có mặt %1$d/%2$d sinh viên</string>
+
 </resources>

@@ -19,5 +19,11 @@ public final class FeedReaderContract {
         public static final String COLUMN_NAME = "Name";
         public static final String COLUMN_MAC1 = "Mac1";
         public static final String COLUMN_MAC2 = "Mac2";
+        public static final String COLUMN_LAN1 = "Lan1";
+        public static final String COLUMN_LAN2 = "Lan2";
+        public static final String COLUMN_LAN3 = "Lan3";
+        public static final String COLUMN_LAN4 = "Lan4";
+        public static final String COLUMN_LAN5 = "Lan5";
+        public static final String COLUMN_LAN6 = "Lan6";
     }
 }

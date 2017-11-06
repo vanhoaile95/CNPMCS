@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Switch;
 
 import com.mcuhq.simplebluetooth.FeedReaderContract.FeedEntry;
 
@@ -25,7 +26,13 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                     FeedEntry.COLUMN_MSSV + " TEXT," +
                     FeedEntry.COLUMN_NAME + " TEXT," +
                     FeedEntry.COLUMN_MAC1 + " TEXT," +
-                    FeedEntry.COLUMN_MAC2 + " TEXT)";
+                    FeedEntry.COLUMN_MAC2 + " TEXT," +
+                    FeedEntry.COLUMN_LAN1 + " TEXT," +
+                    FeedEntry.COLUMN_LAN2 + " TEXT," +
+                    FeedEntry.COLUMN_LAN3 + " TEXT," +
+                    FeedEntry.COLUMN_LAN4 + " TEXT," +
+                    FeedEntry.COLUMN_LAN5 + " TEXT," +
+                    FeedEntry.COLUMN_LAN6 + " TEXT)";
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
@@ -70,6 +77,12 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         values.put(FeedEntry.COLUMN_NAME, std.getName());
         values.put(FeedEntry.COLUMN_MAC1, std.getMac1());
         values.put(FeedEntry.COLUMN_MAC2, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN1, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN2, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN3, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN4, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN5, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN6, std.getMac2());
         db.insert(FeedEntry.TABLE_NAME, null, values);
 
         db.close();
@@ -85,7 +98,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         Students note = new Students(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2));
+                cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
         // return note
         return note;
     }
@@ -147,6 +160,40 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
         db.update(FeedEntry.TABLE_NAME, values, FeedEntry.COLUMN_ID+ " = ?",
                 new String[]{String.valueOf(note.getId())});
+
+        db.close();
+    }
+
+    public void updateDiemDanh(int id, int lan, String value) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        switch(lan)
+        {
+            case 1:
+                values.put(FeedEntry.COLUMN_LAN1, value);
+                break;
+            case 2:
+                values.put(FeedEntry.COLUMN_LAN2, value);
+                break;
+            case 3:
+                values.put(FeedEntry.COLUMN_LAN3, value);
+                break;
+            case 4:
+                values.put(FeedEntry.COLUMN_LAN4, value);
+                break;
+            case 5:
+                values.put(FeedEntry.COLUMN_LAN5, value);
+                break;
+            case 6:
+                values.put(FeedEntry.COLUMN_LAN6, value);
+                break;
+        }
+
+        db.update(FeedEntry.TABLE_NAME, values, FeedEntry.COLUMN_ID+ " = ?",
+                new String[]{String.valueOf(id)});
 
         db.close();
     }

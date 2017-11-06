@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if (!listStd.get(i).isActive()) {
                         numStudent++;
-                        status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
+                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
 
                         mDevicesListView.setItemChecked(i, true);
                         listStd.get(i).setActive(true);
@@ -166,12 +166,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        /*if (mBTArrayAdapter == null) {
-            // Device does not support Bluetooth
-            mBluetoothStatus.setText("Status: Bluetooth not found");
-            Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
-        }*/
-
         diemDanhThuCong.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean bChecked) {
@@ -186,14 +180,29 @@ public class MainActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Lưu kết quả điểm danh lần " + String.valueOf(countValue)
-                        + " thành công",Toast.LENGTH_SHORT).show();
+                if(mBTArrayAdapter.getCount()==0)
+                {
+                    Toast.makeText(getApplicationContext(), getString(R.string.saveNotif), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //Save data
+                    for(int i=0;i<listStd.size();i++)
+                    {
+                        if(listStd.get(i).isActive()==true)
+                        {
+                            mDbHelper.updateDiemDanh(listStd.get(i).getId(), countValue, strToday);
+                        }
+                    }
 
-                countValue++;
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt("Count", countValue);
-                editor.commit();
-                count.setText("Điểm danh lần: " + String.valueOf(countValue));
+                    Toast.makeText(getApplicationContext(),  getString(R.string.saveSuccess, countValue), Toast.LENGTH_SHORT).show();
+
+                    countValue++;
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt("Count", countValue);
+                    editor.commit();
+                    count.setText(getString(R.string.count, countValue));
+                    Reset();
+                }
             }
         });
 
@@ -228,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        status.setText("Có mặt 0/" + String.valueOf(listStd.size()) + " sinh viên");
-        count.setText("Điểm danh lần: " + String.valueOf(countValue));
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+        count.setText(getString(R.string.count,countValue));
 
         //Today is a good day
         Calendar calendar = Calendar.getInstance();
@@ -308,20 +317,25 @@ public class MainActivity extends AppCompatActivity {
                     mDevicesListView.setItemChecked(check, true);
                     listStd.get(check).setActive(true);
                     numStudent++;
-                    status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
+                    status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
                 }
             }
         }
     };
 
-    private void listStudent(View view){
+    private void Reset()
+    {
         numStudent = 0;
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
 
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
-        status.setText("Có mặt " +  String.valueOf(numStudent) + "/" + String.valueOf(listStd.size()) + " sinh viên");
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+    }
+
+    private void listStudent(View view){
+        Reset();
 
         for(int i=0;i<listStd.size();i++) {
             listStd.get(i).setActive(false);
