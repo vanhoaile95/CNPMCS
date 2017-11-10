@@ -23,7 +23,7 @@
         android:layout_gravity="center"
         android:ems="10"
         android:hint="@string/name"
-        android:inputType="textPersonName" />
+        android:inputType="textCapWords"/>
 
     <EditText
         android:id="@+id/mac1"
@@ -32,7 +32,7 @@
         android:layout_gravity="center"
         android:ems="10"
         android:hint="@string/mac1"
-        android:inputType="text" />
+        android:inputType="textCapCharacters" />
 
     <EditText
         android:id="@+id/mac2"
@@ -41,7 +41,7 @@
         android:layout_gravity="center"
         android:ems="10"
         android:hint="@string/mac2"
-        android:inputType="text" />
+        android:inputType="textCapCharacters" />
 
     <Button
         android:id="@+id/ok"

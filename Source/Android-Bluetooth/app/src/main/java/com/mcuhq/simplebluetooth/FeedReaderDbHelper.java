@@ -56,9 +56,11 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void createDefaultStudents()  {
         int count = this.getNotesCount();
         if(count ==0 ) {
+            Students cheat = new Students(0, "", "", "", "");
             Students note1 = new Students(1, "13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4", "Vlxx.tv");
             Students note2 = new Students(2, "13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A","");
             Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "123456","");
+            this.addStudent(cheat);
             this.addStudent(note1);
             this.addStudent(note2);
             this.addStudent(note3);
@@ -123,6 +125,12 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
                 note.setName(cursor.getString(2));
                 note.setMac1(cursor.getString(3));
                 note.setMac2(cursor.getString(4));
+                note.setLan1(cursor.getString(5));
+                note.setLan2(cursor.getString(6));
+                note.setLan3(cursor.getString(7));
+                note.setLan4(cursor.getString(8));
+                note.setLan5(cursor.getString(9));
+                note.setLan6(cursor.getString(10));
 
                 // Thêm vào danh sách.
                 noteList.add(note);
@@ -204,5 +212,12 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         db.delete(FeedEntry.TABLE_NAME, FeedEntry.COLUMN_ID + " = ?",
                 new String[] { String.valueOf(id) });
         db.close();
+    }
+
+    public Cursor getuser() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = db.rawQuery("select * from " + FeedEntry.TABLE_NAME + " ",
+                null);
+        return res;
     }
 }

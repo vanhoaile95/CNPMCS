@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +36,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -40,13 +44,25 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
 import com.mcuhq.simplebluetooth.FeedReaderDbHelper;
 
 import org.w3c.dom.Text;
+
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+
+import static jxl.Workbook.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     String strToday;
     int countValue;
     SharedPreferences sharedPref;
+    List<String> columnDay = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +113,12 @@ public class MainActivity extends AppCompatActivity {
         manual=false;
         editMsssv = (EditText)findViewById(R.id.editMssv);
 
+        ///////////////////////////////////////////////////////
+        //Create database
         mDbHelper = new FeedReaderDbHelper(this);
         mDbHelper.createDefaultStudents();
+
+        //////////////////////////////////////////////////////////
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
 
@@ -128,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     if (!listStd.get(i).isActive()) {
                         numStudent++;
-                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
 
                         mDevicesListView.setItemChecked(i, true);
                         listStd.get(i).setActive(true);
@@ -177,6 +198,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //Today is a good day
+        Calendar calendar = Calendar.getInstance();
+        strToday = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+ "-" +String.valueOf(calendar.get(Calendar.MONTH) + 1) + "-" +
+                String.valueOf(calendar.get(Calendar.YEAR) + " ");
+        today.setText(strToday);
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,8 +212,11 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.saveNotif), Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //Cheat
+                    mDbHelper.updateDiemDanh(0, countValue, strToday);
+
                     //Save data
-                    for(int i=0;i<listStd.size();i++)
+                    for(int i=1;i<listStd.size();i++)
                     {
                         if(listStd.get(i).isActive()==true)
                         {
@@ -237,16 +267,82 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
         count.setText(getString(R.string.count,countValue));
 
-        //Today is a good day
-        Calendar calendar = Calendar.getInstance();
-        strToday = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+ "-" +String.valueOf(calendar.get(Calendar.MONTH) + 1) + "-" +
-                String.valueOf(calendar.get(Calendar.YEAR) + " ");
-        today.setText(strToday);
-
         numStudent = 0;
+
+    }
+
+    private void ExportExcel()
+    {
+        //Request permission
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
+        List<Students> list = mDbHelper.getAllNotes();
+        listStd.addAll(list);
+
+        ////////////////////////////////
+        final Cursor cursor = mDbHelper.getuser();
+
+        File sd = Environment.getExternalStorageDirectory();
+        String csvFile = "ĐiemDanh.xls";
+
+        File directory = new File(sd.getAbsolutePath());
+        //create directory if not exist
+        if (!directory.isDirectory()) {
+            directory.mkdirs();
+        }
+
+        try {
+            File file = new File(directory, csvFile);
+            WorkbookSettings wbSettings = new WorkbookSettings();
+            wbSettings.setLocale(new Locale("en", "EN"));
+            WritableWorkbook workbook;
+            workbook = Workbook.createWorkbook(file, wbSettings);
+            WritableSheet sheet = workbook.createSheet("CNPM Chuyên Sâu", 0);
+            sheet.addCell(new Label(0, 0, "STT"));
+            sheet.addCell(new Label(1, 0, "Mã số sinh viên"));
+            sheet.addCell(new Label(2, 0, "Họ tên"));
+            sheet.addCell(new Label(3, 0, listStd.get(0).getLan1()));
+            sheet.addCell(new Label(4, 0, listStd.get(0).getLan2()));
+            sheet.addCell(new Label(5, 0, listStd.get(0).getLan3()));
+            sheet.addCell(new Label(6, 0, listStd.get(0).getLan4()));
+            sheet.addCell(new Label(7, 0, listStd.get(0).getLan5()));
+            sheet.addCell(new Label(8, 0, listStd.get(0).getLan6()));
+
+            if (cursor.moveToFirst()) {
+                do {
+                    String id = cursor.getString(cursor.getColumnIndex("Id"));
+                    String mssv = cursor.getString(cursor.getColumnIndex("Mssv"));
+                    String name = cursor.getString(cursor.getColumnIndex("Name"));
+                    String lan1 = cursor.getString(cursor.getColumnIndex("Lan1"));
+                    String lan2 = cursor.getString(cursor.getColumnIndex("Lan2"));
+                    String lan3 = cursor.getString(cursor.getColumnIndex("Lan3"));
+                    String lan4 = cursor.getString(cursor.getColumnIndex("Lan4"));
+                    String lan5 = cursor.getString(cursor.getColumnIndex("Lan5"));
+                    String lan6 = cursor.getString(cursor.getColumnIndex("Lan6"));
+
+                    if(!mssv.isEmpty()) {
+                        int i = cursor.getPosition() + 1;
+                        sheet.addCell(new Label(0, i, id));
+                        sheet.addCell(new Label(1, i, mssv));
+                        sheet.addCell(new Label(2, i, name));
+                        if (!lan1.isEmpty())
+                            sheet.addCell(new Label(3, i, "x"));
+                    }
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close();
+            workbook.write();
+            workbook.close();
+            Toast.makeText(getApplicationContext(),
+                    "Xuất dữ liệu thành công", Toast.LENGTH_SHORT).show();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -263,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Nhập excel",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.exportExcel:
-                Toast.makeText(getApplicationContext(),"Xuất excel",Toast.LENGTH_SHORT).show();
+                ExportExcel();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -315,9 +411,9 @@ public class MainActivity extends AppCompatActivity {
                 if(CheckStudent(device.getAddress())!=-1) {
                     int check = CheckStudent(device.getAddress());
                     mDevicesListView.setItemChecked(check, true);
-                    listStd.get(check).setActive(true);
+                    listStd.get(check+1).setActive(true);
                     numStudent++;
-                    status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+                    status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
                 }
             }
         }
@@ -331,13 +427,13 @@ public class MainActivity extends AppCompatActivity {
 
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
-        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
     }
 
     private void listStudent(View view){
         Reset();
 
-        for(int i=0;i<listStd.size();i++) {
+        for(int i=1;i<listStd.size();i++) {
             listStd.get(i).setActive(false);
             mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
             mDevicesListView.setItemChecked(i, false);
@@ -377,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
                 ck = i;
             }
         }
-        return ck;
+        return ck-1;
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {

@@ -76,10 +76,10 @@ public class Dssv extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.update:
-                ShowCustomDialog(1, info.position);
+                ShowCustomDialog(1, info.position+1);
                 break;
             case R.id.del:
-                mDbHelper.deleteStudent(listStd.get(info.position).getId());
+                mDbHelper.deleteStudent(listStd.get(info.position+1).getId());
                 LoadData();
                 Toast.makeText(getApplicationContext(),"Xóa thành công" ,Toast.LENGTH_SHORT).show();
                 break;
@@ -96,7 +96,7 @@ public class Dssv extends AppCompatActivity {
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
 
-        for(int i=0;i<listStd.size();i++)
+        for(int i=1;i<listStd.size();i++)
         {
             arrStudent.add(listStd.get(i).getMssv() + "    "+ listStd.get(i).getName());
         }
