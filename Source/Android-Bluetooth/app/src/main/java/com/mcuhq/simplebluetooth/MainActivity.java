@@ -136,23 +136,24 @@ public class MainActivity extends AppCompatActivity {
         mDevicesListView = (ListView)findViewById(R.id.devicesListView);
         mDevicesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+        //Diem danh thu cong
         mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(!manual) {
-                    if (!listStd.get(i).isActive())
+                    if (!listStd.get(i+1).isActive())
                         mDevicesListView.setItemChecked(i, false);
                     else
                         mDevicesListView.setItemChecked(i, true);
                 }
                 else
                 {
-                    if (!listStd.get(i).isActive()) {
+                    if (!listStd.get(i+1).isActive()) {
                         numStudent++;
                         status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
 
                         mDevicesListView.setItemChecked(i, true);
-                        listStd.get(i).setActive(true);
+                        listStd.get(i+1).setActive(true);
                     }
                     else {
                         mDevicesListView.setItemChecked(i, true);
@@ -331,6 +332,16 @@ public class MainActivity extends AppCompatActivity {
                         sheet.addCell(new Label(2, i, name));
                         if (!lan1.isEmpty())
                             sheet.addCell(new Label(3, i, "x"));
+                        if (!lan2.isEmpty())
+                            sheet.addCell(new Label(4, i, "x"));
+                        if (!lan3.isEmpty())
+                            sheet.addCell(new Label(5, i, "x"));
+                        if (!lan4.isEmpty())
+                            sheet.addCell(new Label(6, i, "x"));
+                        if (!lan5.isEmpty())
+                            sheet.addCell(new Label(7, i, "x"));
+                        if (!lan6.isEmpty())
+                            sheet.addCell(new Label(8, i, "x"));
                     }
                 } while (cursor.moveToNext());
             }
@@ -338,8 +349,7 @@ public class MainActivity extends AppCompatActivity {
             cursor.close();
             workbook.write();
             workbook.close();
-            Toast.makeText(getApplicationContext(),
-                    "Xuất dữ liệu thành công", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.exportSuccess), Toast.LENGTH_SHORT).show();
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -428,15 +438,18 @@ public class MainActivity extends AppCompatActivity {
         List<Students> list = mDbHelper.getAllNotes();
         listStd.addAll(list);
         status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
+
+        for(int i=1;i<listStd.size();i++) {
+            listStd.get(i).setActive(false);
+            mDevicesListView.setItemChecked(i-1, false);
+        }
     }
 
     private void listStudent(View view){
         Reset();
 
         for(int i=1;i<listStd.size();i++) {
-            listStd.get(i).setActive(false);
             mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
-            mDevicesListView.setItemChecked(i, false);
         }
         mBTArrayAdapter.notifyDataSetChanged();
 
@@ -467,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
     private int CheckStudent(String str)
     {
         int ck = -1;
-        for(int i=0;i<listStd.size();i++) {
+        for(int i=1;i<listStd.size();i++) {
             if(str.equals(listStd.get(i).getMac1()) || str.equals(listStd.get(i).getMac2()))
             {
                 ck = i;

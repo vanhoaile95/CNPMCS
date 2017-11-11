@@ -24,4 +24,5 @@
     <string name="count">Điểm danh lần: %1$d</string>
     <string name="numStudent">Có mặt %1$d/%2$d sinh viên</string>
 
+    <string name="exportSuccess">Xuất dữ liệu thành công</string>
 </resources>

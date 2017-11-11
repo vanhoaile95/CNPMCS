@@ -79,12 +79,12 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         values.put(FeedEntry.COLUMN_NAME, std.getName());
         values.put(FeedEntry.COLUMN_MAC1, std.getMac1());
         values.put(FeedEntry.COLUMN_MAC2, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN1, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN2, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN3, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN4, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN5, std.getMac2());
-        values.put(FeedEntry.COLUMN_LAN6, std.getMac2());
+        values.put(FeedEntry.COLUMN_LAN1, std.getLan1());
+        values.put(FeedEntry.COLUMN_LAN2, std.getLan2());
+        values.put(FeedEntry.COLUMN_LAN3, std.getLan3());
+        values.put(FeedEntry.COLUMN_LAN4, std.getLan4());
+        values.put(FeedEntry.COLUMN_LAN5, std.getLan5());
+        values.put(FeedEntry.COLUMN_LAN6, std.getLan6());
         db.insert(FeedEntry.TABLE_NAME, null, values);
 
         db.close();
