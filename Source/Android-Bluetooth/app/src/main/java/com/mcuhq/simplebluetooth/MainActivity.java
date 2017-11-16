@@ -454,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
         mBTArrayAdapter.notifyDataSetChanged();
 
         if(mBTAdapter.isDiscovering()){
+			unregisterReceiver(blReceiver);
             mBTAdapter.cancelDiscovery();
             Toast.makeText(getApplicationContext(),"Dừng quét",Toast.LENGTH_SHORT).show();
         }

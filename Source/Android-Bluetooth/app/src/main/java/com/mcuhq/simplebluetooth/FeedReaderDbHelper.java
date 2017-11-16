@@ -59,7 +59,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             Students cheat = new Students(0, "", "", "", "");
             Students note1 = new Students(1, "13520086", "Nguyễn Đình Chương", "18:CF:5E:A8:47:B4", "Vlxx.tv");
             Students note2 = new Students(2, "13520422", "Phan Thanh Lam", "58:00:E3:B8:7D:0A","");
-            Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "123456","");
+            Students note3 = new Students(3, "13520290", "Lê Văn Hoài", "1C:23:2C:53:33:5E","6C:71:D9:98:A4:90");
             this.addStudent(cheat);
             this.addStudent(note1);
             this.addStudent(note2);
