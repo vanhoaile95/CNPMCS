@@ -7,10 +7,24 @@
 
 
     <Button
+        android:id="@+id/btnAddExcel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm sinh viên từ file Excel" />
+
+
+
+    <Button
         android:id="@+id/btnAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/addStudent" />
+
+    <Button
+        android:id="@+id/capNhatDiaChiMac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cập Nhật địa chỉ Bluetooth" />
 
     <ListView
         android:layout_width="match_parent"

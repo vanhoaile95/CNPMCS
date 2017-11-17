@@ -32,6 +32,9 @@
 
         <activity android:name= ".Dssv"
                 android:label="Danh Sách Sinh Viên"> </activity>
+
+        <activity android:name= ".DsClass"
+            android:label="Danh Sách Lớp"> </activity>
     </application>
 
 </manifest>

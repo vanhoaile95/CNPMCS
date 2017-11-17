@@ -70,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView today;
     private TextView status;
     private TextView count;
+    private TextView lop;
     private Switch diemDanhThuCong;
+    private Button dsLop;
     private Button dssv;
     private Button listStudent;
     private Button btnSave;
@@ -127,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
         status = (TextView)findViewById(R.id.status);
         diemDanhThuCong = (Switch) findViewById(R.id.manual);
         dssv = (Button)findViewById(R.id.dssv);
+        dsLop=(Button)findViewById(R.id.btndsLop);
+        lop=(TextView)findViewById(R.id.tbTenLop);
         listStudent = (Button)findViewById(R.id.listStudent);
         btnSave = (Button)findViewById(R.id.save);
 
@@ -248,6 +252,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 dssv(v);
+            }
+        });
+
+        dsLop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dsLop(v);
             }
         });
 
@@ -476,6 +487,13 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(MainActivity.this, Dssv.class);
         MainActivity.this.startActivity(i);
+    }
+
+    private void dsLop(View view){
+
+        Intent i = new Intent(MainActivity.this, DsClass.class);
+        MainActivity.this.startActivity(i);
+        lop.setText("CNPMCS");//set lại lớp đang điểm danh
     }
 
     private int CheckStudent(String str)

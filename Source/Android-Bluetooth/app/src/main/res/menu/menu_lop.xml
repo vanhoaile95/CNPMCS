@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/delLop"
+        android:title="@string/del"/>
+    <item android:id="@+id/updateLop"
+        android:title="@string/update"/>
+    <item android:id="@+id/selectLop"
+        android:title="@string/select"/>
+</menu>

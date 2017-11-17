@@ -1,6 +1,12 @@
 package com.mcuhq.simplebluetooth;
 
+import android.app.Dialog;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
@@ -13,10 +19,17 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /**
  * Created by chuong on 10/17/2017.
@@ -24,19 +37,42 @@ import java.util.List;
 
 public class Dssv extends AppCompatActivity {
     private Button btnAdd;
+    private Button btnAddExcel;
+    private Button btncapNhatDiaChiMac;
     private ListView listStudent;
     private ArrayAdapter<String> arrStudent;
+    private String excelFile;
     List<Students> listStd = new ArrayList<Students>();
     FeedReaderDbHelper mDbHelper;
+
+    //open file dialog
+
+    Button buttonUp;
+    TextView textFolder;
+
+    String KEY_TEXTPSS = "TEXTPSS";
+    static final int CUSTOM_DIALOG_ID = 0;
+    ListView dialog_ListView;
+    private ArrayAdapter<String> arrLisFolder;
+    File root;
+    File curFolder;
+
+    private List<String> fileList = new ArrayList<String>();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dssv);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         mDbHelper = new FeedReaderDbHelper(this);
 
         btnAdd = (Button)findViewById(R.id.btnAdd);
+
+        btncapNhatDiaChiMac=(Button)findViewById(R.id.capNhatDiaChiMac);
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +86,131 @@ public class Dssv extends AppCompatActivity {
         registerForContextMenu(listStudent);
 
         LoadData();
+
+        //open file dialog
+        btnAddExcel=(Button)findViewById(R.id.btnAddExcel);
+        btnAddExcel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowOpenFileDialog();
+            }
+        });
+
+
+
+        //Toast.makeText(getApplicationContext(),root.toString(),Toast.LENGTH_SHORT).show();
     }
+
+    //open file dialog
+
+
+
+
+
+    private void ShowOpenFileDialog()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_openfile, null);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+        curFolder = root;
+        textFolder = (TextView) mView.findViewById(R.id.folder);
+        buttonUp = (Button) mView.findViewById(R.id.up);
+        buttonUp.setEnabled(false);
+        dialog_ListView = (ListView) mView.findViewById(R.id.dialoglist);
+
+
+        ListDir(curFolder);
+
+
+
+
+        buttonUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ListDir(curFolder.getParentFile());
+            }
+        });
+
+
+        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                File selected = new File(fileList.get(position));
+                if(selected.isDirectory()) {
+                    ListDir(selected);
+                } else {
+                    //Toast.makeText(getApplicationContext(), selected.toString() + " selected",
+                            //Toast.LENGTH_LONG).show();
+                    excelFile=selected.toString();
+
+                    dialog.cancel();
+                    readExcel(excelFile);
+                }
+            }
+        });
+
+    }
+
+    void ListDir(File f) {
+        if(f.equals(root)) {
+            buttonUp.setEnabled(false);
+        } else {
+            buttonUp.setEnabled(true);
+        }
+
+        curFolder = f;
+        textFolder.setText(f.getPath());
+
+        File[] files = f.listFiles();
+        fileList.clear();
+        List<String> fileListNode= new ArrayList<String>();
+        for(File file : files) {
+            fileList.add(file.getPath());
+            fileListNode.add(file.getName());
+        }
+
+
+
+        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, fileListNode);
+        dialog_ListView.setAdapter(directoryList);
+    }
+
+
+    private void readExcel(String fileExcel)
+    {
+        try {
+
+
+            Workbook wb =Workbook.getWorkbook(new File (excelFile));
+            Sheet s=wb.getSheet(0);
+            int row =s.getRows();
+            int col=s.getColumns();
+            String xx="";
+            Cell z=s.getCell(0,0);
+            xx=xx+z.getContents();
+            //display(xx);
+            Toast.makeText(getApplicationContext(), xx ,
+                    Toast.LENGTH_LONG).show();
+        }
+
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(), excelFile,
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+
+/////////////////////////////////////////////////////
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,6 +263,8 @@ public class Dssv extends AppCompatActivity {
 
         arrStudent.notifyDataSetChanged();
     }
+
+
 
     private void ShowCustomDialog(final int type, final int pos)
     {
