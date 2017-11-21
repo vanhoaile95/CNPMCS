@@ -26,4 +26,12 @@ public final class FeedReaderContract {
         public static final String COLUMN_LAN5 = "Lan5";
         public static final String COLUMN_LAN6 = "Lan6";
     }
+
+    public static class ClassRoom implements BaseColumns {
+        public static final String TABLE_NAME = "CLASSROOM";
+        public static final String COLUMN_ID = "Id";
+        public static final String COLUMN_CLASSNAME = "ClassName";
+        public static final String COLUMN_CLASSSTATUS = "Status";//trạng thái được điểm danh
+
+    }
 }
