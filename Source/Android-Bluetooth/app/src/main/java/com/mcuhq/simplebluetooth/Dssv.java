@@ -22,14 +22,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.File;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
+
 
 /**
  * Created by chuong on 10/17/2017.
@@ -189,21 +194,89 @@ public class Dssv extends AppCompatActivity {
         try {
 
 
-            Workbook wb =Workbook.getWorkbook(new File (excelFile));
-            Sheet s=wb.getSheet(0);
-            int row =s.getRows();
-            int col=s.getColumns();
-            String xx="";
-            Cell z=s.getCell(0,0);
-            xx=xx+z.getContents();
-            //display(xx);
-            Toast.makeText(getApplicationContext(), xx ,
-                    Toast.LENGTH_LONG).show();
+            FileInputStream file = new FileInputStream(new File(fileExcel));
+            XSSFWorkbook wb = new XSSFWorkbook(file);
+
+            XSSFWorkbook test = new XSSFWorkbook();
+
+            XSSFSheet sheet = wb.getSheetAt(0);
+            XSSFRow row;
+            XSSFCell cell;
+
+            Iterator rows = sheet.rowIterator();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+
+
+            while (rows.hasNext())
+            {
+                row=(XSSFRow) rows.next();
+
+                Iterator cells = row.cellIterator();
+                String name="";
+                String mssv="";
+                cells.next();//số thứ tự
+                cell=(XSSFCell) cells.next();//mã số sinh viên
+
+
+                if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING)
+                {
+                    mssv=cell.getStringCellValue();
+
+
+                }
+                else if(cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
+                {
+                    mssv=String.valueOf(cell.getNumericCellValue());
+
+
+                }
+                else
+                {
+                    //U Can Handel Boolean, Formula, Errors
+                }
+
+                cell=(XSSFCell) cells.next();//tên
+
+                if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING)
+                {
+                    name=cell.getStringCellValue();
+
+
+                }
+                else if(cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
+                {
+                    name=String.valueOf(cell.getNumericCellValue());
+
+
+                }
+                else
+                {
+                    //U Can Handel Boolean, Formula, Errors
+                }
+
+                if(mssv.equals("") || name.equals(""))
+                    break;
+
+                arrStudent.add(mssv+ "    "+ name);
+                arrStudent.notifyDataSetChanged();
+
+            }
+
+
         }
 
         catch (Exception e)
         {
-            Toast.makeText(getApplicationContext(), excelFile,
+            Toast.makeText(getApplicationContext(), "Không đọc được file "+excelFile,
                     Toast.LENGTH_LONG).show();
         }
 
