@@ -76,6 +76,7 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
             this.addStudent(note2);
             this.addStudent(note3);
         }
+
     }
 
     public void addStudent(Students std)

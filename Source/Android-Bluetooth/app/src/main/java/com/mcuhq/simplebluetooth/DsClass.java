@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class DsClass extends AppCompatActivity {
     private ListView listClass;
     private ArrayAdapter<String> listTenClass;
     private FeedReaderDbHelper mDbHelper;
+    private List<ClassRooms> listclassRooms;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +46,18 @@ public class DsClass extends AppCompatActivity {
             }
         });
 
+        listclassRooms=new ArrayList<ClassRooms>();
         listTenClass = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
         listClass = (ListView)findViewById(R.id.listClass);
         listClass.setAdapter(listTenClass);
         registerForContextMenu(listClass);
-        listTenClass.add("Tên Lớp Học");
-        listTenClass.notifyDataSetChanged();
+        //
+        tvLopChon.setText("Lớp điểm danh: ");
+        //load danh sách lớp
+        LoadListClass();
+
+        //listTenClass.add("Tên Lớp Học");
+        //listTenClass.notifyDataSetChanged();
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -75,18 +83,14 @@ public class DsClass extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.updateLop:
-                //ShowCustomDialog(1, info.position+1);
-                Toast.makeText(getApplicationContext(),"Cập nhật thành công" ,Toast.LENGTH_SHORT).show();
+                ShowCustomDialog(1, info.position);
+                //Toast.makeText(getApplicationContext(),"Cập nhật thành công" ,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.delLop:
-                Toast.makeText(getApplicationContext(),"Xóa thành công" ,Toast.LENGTH_SHORT).show();
+                deleteClassRoom(info.position);
                 break;
             case R.id.selectLop:
-                Toast.makeText(getApplicationContext(),"Chọn lớp thành công" ,Toast.LENGTH_SHORT).show();
-                //View mView = getLayoutInflater().inflate(R.layout.activity_main, null);
-                //TextView tv=(TextView) mView.findViewById(R.id.tbTenLop);
-                tvLopChon.setText("Lớp: CNPMCS");
-                //this.finish();
+                updateClassRoomON(info.position);
                 break;
         }
 
@@ -94,7 +98,7 @@ public class DsClass extends AppCompatActivity {
     }
 
 
-    private void ShowCustomDialog(final int type, final int pos)
+    private void ShowCustomDialog(final int type, final int pos)//type=0 thêm, 1 update
     {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(DsClass.this);
         View mView = getLayoutInflater().inflate(R.layout.dialog_lop, null);
@@ -118,10 +122,10 @@ public class DsClass extends AppCompatActivity {
                 if(!TenLop.getText().toString().isEmpty() ) {
                     if (type == 0) {
                        //thêm vào csdl
-                        Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+                        addClassRoom(TenLop.getText().toString());
                     } else {
                         //cập nhật vào csdl
-                        Toast.makeText(getApplicationContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                        updateClassRoom(pos,TenLop.getText().toString());
                     }
 
                     //cập nhật
@@ -135,5 +139,94 @@ public class DsClass extends AppCompatActivity {
         });
     }
 
+    private void LoadListClass()
+    {
+        //load danh sách
+        try {
+            listTenClass.clear();
+            listclassRooms= mDbHelper.getAllClassRoom();
+            for(int i=0; i<listclassRooms.size();i++)
+            {
+                if(!listclassRooms.get(i).getStatus().equals("2"))
+                    listTenClass.add(listclassRooms.get(i).getName());
+
+                if(listclassRooms.get(i).getStatus().equals("1"))
+                    tvLopChon.setText("Lớp điểm danh: "+listclassRooms.get(i).getName());
+            }
+            listTenClass.notifyDataSetChanged();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Load danh sách lớp thất bại" ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void addClassRoom(String className)
+    {
+        try{
+            ClassRooms clr=new ClassRooms(mDbHelper.getNotesClassRoomCount()+1,className,"0");
+            mDbHelper.addClassRooms(clr);
+            LoadListClass();
+            Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Thêm thất bại" ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void updateClassRoom(int id, String className)
+    {
+        try{
+            int clrid=listclassRooms.get(id).getId();
+            String clrName=className;
+            ClassRooms clr=new ClassRooms(clrid,className,"0");
+            mDbHelper.updateClassRoom(clr);
+            LoadListClass();
+            Toast.makeText(getApplicationContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Cập nhật thất bại" ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void deleteClassRoom(int id)
+    {
+        try{
+
+            mDbHelper.deleteClassroom(id+1);
+            LoadListClass();
+            Toast.makeText(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Xóa thất bại" ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    private void updateClassRoomON(int id)
+    {
+        try{
+            int clrid=listclassRooms.get(id).getId();
+            mDbHelper.updateClassRoomON(clrid);
+            LoadListClass();
+            Toast.makeText(getApplicationContext(), "Chon thành công", Toast.LENGTH_SHORT).show();
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),"Chọn thất bại" ,Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
 
 }
