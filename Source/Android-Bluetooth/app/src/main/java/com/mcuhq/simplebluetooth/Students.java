@@ -11,16 +11,22 @@ public class Students{
     private String name;
     private String mac1;
     private String mac2;
-    private String lan1;
-    private String lan2;
-    private String lan3;
-    private String lan4;
-    private String lan5;
-    private String lan6;
+    private String m_class;
 
     private boolean active;
 
     public Students(){}
+
+    public Students(int id, String mssv, String name, String _class)
+    {
+        this.id = id;
+        this.mssv=mssv;
+        this.name=name;
+        this.mac1 = "";
+        this.mac2 = "";
+        this.active=false;
+        this.m_class=_class;
+    }
 
     public Students(int id, String mssv, String name, String mac1, String mac2)
     {
@@ -30,12 +36,17 @@ public class Students{
         this.mac1 = mac1;
         this.mac2 = mac2;
         this.active=false;
-        this.lan1 = "";
-        this.lan2 = "";
-        this.lan3 = "";
-        this.lan4 = "";
-        this.lan5 = "";
-        this.lan6 = "";
+    }
+
+    public Students(int id, String mssv, String name, String _class, String mac1, String mac2)
+    {
+        this.id = id;
+        this.mssv=mssv;
+        this.name=name;
+        this.mac1 = mac1;
+        this.mac2 = mac2;
+        this.active=false;
+        this.m_class=_class;
     }
 
     public int getId() {
@@ -86,51 +97,12 @@ public class Students{
         this.mac2 = mac;
     }
 
-    public String getLan1() {
-        return lan1;
+    public String getClassStd() {
+        return m_class;
     }
 
-    public void setLan1(String lan) {
-        this.lan1 = lan;
+    public void setClassStd(String _class) {
+        this.m_class = _class;
     }
 
-    public String getLan2() {
-        return lan2;
-    }
-
-    public void setLan2(String lan) {
-        this.lan2 = lan;
-    }
-
-    public String getLan3() {
-        return lan3;
-    }
-
-    public void setLan3(String lan) {
-        this.lan3 = lan;
-    }
-
-    public String getLan4() {
-        return lan4;
-    }
-
-    public void setLan4(String lan) {
-        this.lan4 = lan;
-    }
-
-    public String getLan5() {
-        return lan5;
-    }
-
-    public void setLan5(String lan) {
-        this.lan5 = lan;
-    }
-
-    public String getLan6() {
-        return lan6;
-    }
-
-    public void setLan6(String lan) {
-        this.lan6 = lan;
-    }
 }

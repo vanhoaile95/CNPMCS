@@ -48,6 +48,7 @@ public class Dssv extends AppCompatActivity {
     private ArrayAdapter<String> arrStudent;
     private String excelFile;
     List<Students> listStd = new ArrayList<Students>();
+    List<Students> listAllStd = new ArrayList<Students>();
     FeedReaderDbHelper mDbHelper;
 
     //open file dialog
@@ -69,8 +70,6 @@ public class Dssv extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dssv);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
 
         mDbHelper = new FeedReaderDbHelper(this);
 
@@ -101,17 +100,10 @@ public class Dssv extends AppCompatActivity {
             }
         });
 
-
-
         //Toast.makeText(getApplicationContext(),root.toString(),Toast.LENGTH_SHORT).show();
     }
 
     //open file dialog
-
-
-
-
-
     private void ShowOpenFileDialog()
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
@@ -130,11 +122,7 @@ public class Dssv extends AppCompatActivity {
         buttonUp.setEnabled(false);
         dialog_ListView = (ListView) mView.findViewById(R.id.dialoglist);
 
-
         ListDir(curFolder);
-
-
-
 
         buttonUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +130,6 @@ public class Dssv extends AppCompatActivity {
                 ListDir(curFolder.getParentFile());
             }
         });
-
 
         dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -160,7 +147,6 @@ public class Dssv extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     void ListDir(File f) {
@@ -309,10 +295,10 @@ public class Dssv extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.update:
-                ShowCustomDialog(1, info.position+1);
+                ShowCustomDialog(1, info.position);
                 break;
             case R.id.del:
-                mDbHelper.deleteStudent(listStd.get(info.position+1).getId());
+                mDbHelper.deleteStudent(listStd.get(info.position).getId());
                 LoadData();
                 Toast.makeText(getApplicationContext(),"Xóa thành công" ,Toast.LENGTH_SHORT).show();
                 break;
@@ -326,18 +312,16 @@ public class Dssv extends AppCompatActivity {
         arrStudent.clear();
         listStd.clear();
 
-        List<Students> list = mDbHelper.getAllNotes();
+        List<Students> list = mDbHelper.getListStudents(MainActivity.currentClass);
         listStd.addAll(list);
 
-        for(int i=1;i<listStd.size();i++)
+        for(int i=0;i<listStd.size();i++)
         {
             arrStudent.add(listStd.get(i).getMssv() + "    "+ listStd.get(i).getName());
         }
 
         arrStudent.notifyDataSetChanged();
     }
-
-
 
     private void ShowCustomDialog(final int type, final int pos)
     {
@@ -367,8 +351,12 @@ public class Dssv extends AppCompatActivity {
 
                 if(!mssv.getText().toString().isEmpty() && !name.getText().toString().isEmpty()) {
                     if (type == 0) {
-                        Students std = new Students(listStd.get(listStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString()
-                                , mac1.getText().toString(), mac2.getText().toString());
+                        listAllStd.clear();
+                        List<Students> list = mDbHelper.getAllStudents();
+                        listAllStd.addAll(list);
+
+                        Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString(),
+                                MainActivity.currentClass, mac1.getText().toString(), mac2.getText().toString());
                         mDbHelper.addStudent(std);
                         Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                     } else {

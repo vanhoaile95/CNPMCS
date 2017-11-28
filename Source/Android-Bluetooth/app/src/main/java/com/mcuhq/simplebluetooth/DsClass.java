@@ -64,6 +64,7 @@ public class DsClass extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
+                MainActivity.lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
                 this.finish();
                 return true;
             default:
@@ -90,6 +91,7 @@ public class DsClass extends AppCompatActivity {
                 deleteClassRoom(info.position);
                 break;
             case R.id.selectLop:
+                MainActivity.currentClass = listclassRooms.get(info.position).getName();
                 updateClassRoomON(info.position);
                 break;
         }
@@ -112,6 +114,7 @@ public class DsClass extends AppCompatActivity {
         if(type==1)
         {
             //get tên lớp
+            TenLop.setText(listclassRooms.get(pos).getName());
         }
 
         Button btnOk = (Button)mView.findViewById(R.id.okLop);
@@ -125,7 +128,7 @@ public class DsClass extends AppCompatActivity {
                         addClassRoom(TenLop.getText().toString());
                     } else {
                         //cập nhật vào csdl
-                        updateClassRoom(pos,TenLop.getText().toString());
+                        updateClassRoom(pos, TenLop.getText().toString());
                     }
 
                     //cập nhật
@@ -150,8 +153,10 @@ public class DsClass extends AppCompatActivity {
                 if(!listclassRooms.get(i).getStatus().equals("2"))
                     listTenClass.add(listclassRooms.get(i).getName());
 
-                if(listclassRooms.get(i).getStatus().equals("1"))
-                    tvLopChon.setText("Lớp điểm danh: "+listclassRooms.get(i).getName());
+                if(listclassRooms.get(i).getStatus().equals("1")) {
+                    tvLopChon.setText("Lớp điểm danh: " + listclassRooms.get(i).getName());
+                    MainActivity.currentClass = listclassRooms.get(i).getName();
+                }
             }
             listTenClass.notifyDataSetChanged();
         }

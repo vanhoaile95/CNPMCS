@@ -13,18 +13,29 @@ public final class FeedReaderContract {
 
     /* Inner class that defines the table contents */
     public static class FeedEntry implements BaseColumns {
-        public static final String TABLE_NAME = "STUDENTS";
-        public static final String COLUMN_ID = "Id";
-        public static final String COLUMN_MSSV = "Mssv";
-        public static final String COLUMN_NAME = "Name";
-        public static final String COLUMN_MAC1 = "Mac1";
-        public static final String COLUMN_MAC2 = "Mac2";
-        public static final String COLUMN_LAN1 = "Lan1";
-        public static final String COLUMN_LAN2 = "Lan2";
-        public static final String COLUMN_LAN3 = "Lan3";
-        public static final String COLUMN_LAN4 = "Lan4";
-        public static final String COLUMN_LAN5 = "Lan5";
-        public static final String COLUMN_LAN6 = "Lan6";
+        //Table student
+        public static final String TABLE_STUDENT = "STUDENTS";
+        public static final String COLUMN_ID = "ID";
+        public static final String COLUMN_MSSV = "MSSV";
+        public static final String COLUMN_NAME = "NAME";
+        public static final String COLUMN_CLASS = "CLASS";
+        public static final String COLUMN_MAC1 = "MAC1";
+        public static final String COLUMN_MAC2 = "MAC2";
+
+        //Table diem danh
+        public static final String TABLE_DIEM_DANH = "DIEMDANH";
+        public static final String COLUMN_ID_DD = "ID";
+        public static final String COLUMN_ID_SV_DD = "IDSV";
+        public static final String COLUMN_DAY_DD = "NGAY";
+        public static final String COLUMN_LAN_DD = "LAN";
+        public static final String COLUMN_GHI_CHU = "GHICHU";
+
+        //Table ngay diem danh
+        public static final String TABLE_NGAY_DIEM_DANH = "NGAYDIEMDANH";
+        public static final String COLUMN_ID_NDD = "ID";
+        public static final String COLUMN_DAY = "DAY";
+        public static final String COLUMN_LAN = "LAN";
+        public static final String COLUMN_DAY_CLASS = "CLASS";
     }
 
     public static class ClassRoom implements BaseColumns {

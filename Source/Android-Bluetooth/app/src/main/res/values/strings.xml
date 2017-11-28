@@ -5,7 +5,7 @@
     <string name="select">Chọn lớp Điểm Danh</string>
     <string name="listStudent">Danh sách sinh viên</string>
     <string name="listClass">Danh sách lớp học</string>
-    <string name="classRoom">Lớp:</string>
+    <string name="classRoom">Lớp điểm danh:</string>
     <string name="diemdanh">Điểm danh</string>
     <string name="save">Lưu kết quả</string>
     <string name="inputId">Nhập mã số...</string>
@@ -30,4 +30,5 @@
     <string name="numStudent">Có mặt %1$d/%2$d sinh viên</string>
 
     <string name="exportSuccess">Xuất dữ liệu thành công</string>
+    <string name="ghichu">Thêm ghi chú</string>
 </resources>

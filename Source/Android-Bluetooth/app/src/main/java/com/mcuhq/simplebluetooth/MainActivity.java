@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -17,11 +18,14 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -66,11 +70,13 @@ import static jxl.Workbook.*;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String currentClass = "CNPMCS";
+
     // GUI Components
     private TextView today;
     private TextView status;
     private TextView count;
-    private TextView lop;
+    public static TextView lop;
     private Switch diemDanhThuCong;
     private Button dsLop;
     private Button dssv;
@@ -102,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
     String strToday;
     int countValue;
     SharedPreferences sharedPref;
-    List<String> columnDay = new ArrayList<String>();
+    List<GhiChu> ghiChu = new ArrayList<GhiChu>();
+    int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////
         //Create database
         mDbHelper = new FeedReaderDbHelper(this);
-        mDbHelper.createDefaultStudents();
+        mDbHelper.createDefault();
 
         //////////////////////////////////////////////////////////
-        List<Students> list = mDbHelper.getAllNotes();
+        List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
 
         count = (TextView)findViewById(R.id.count);
@@ -140,24 +147,26 @@ public class MainActivity extends AppCompatActivity {
         mDevicesListView = (ListView)findViewById(R.id.devicesListView);
         mDevicesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+        registerForContextMenu(mDevicesListView);
+
         //Diem danh thu cong
         mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if(!manual) {
-                    if (!listStd.get(i+1).isActive())
+                    if (!listStd.get(i).isActive())
                         mDevicesListView.setItemChecked(i, false);
                     else
                         mDevicesListView.setItemChecked(i, true);
                 }
                 else
                 {
-                    if (!listStd.get(i+1).isActive()) {
+                    if (!listStd.get(i).isActive()) {
                         numStudent++;
-                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
+                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
 
                         mDevicesListView.setItemChecked(i, true);
-                        listStd.get(i+1).setActive(true);
+                        listStd.get(i).setActive(true);
                     }
                     else {
                         mDevicesListView.setItemChecked(i, true);
@@ -217,15 +226,51 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.saveNotif), Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    //Cheat
-                    mDbHelper.updateDiemDanh(0, countValue, strToday);
+                    //Save day
+                    List<NgayDiemDanh> arrDays = new ArrayList<NgayDiemDanh>();
+                    List<NgayDiemDanh> listDays = mDbHelper.getAllDays(currentClass);
+                    arrDays.addAll(listDays);
+                    int num = 0;
 
+                    for(int i=0;i<arrDays.size();i++)
+                    {
+                        if(arrDays.get(i).getDay().equals(strToday))
+                        {
+                            pos = i;
+                            num++;
+                        }
+                    }
+
+                    if(num==0) {
+                        NgayDiemDanh day = new NgayDiemDanh(mDbHelper.getDayCount()+1, strToday, 1, currentClass);
+                        mDbHelper.addDay(day);
+                    }
+                    else
+                    {
+                        NgayDiemDanh day = new NgayDiemDanh(arrDays.get(pos).getId(), strToday, arrDays.get(pos).getLan()+1, currentClass);
+                        mDbHelper.updateDay(day);
+                    }
+                    ///////////////////////////////////////////////////////////////
                     //Save data
-                    for(int i=1;i<listStd.size();i++)
+                    for(int i=0;i<listStd.size();i++)
                     {
                         if(listStd.get(i).isActive()==true)
                         {
-                            mDbHelper.updateDiemDanh(listStd.get(i).getId(), countValue, strToday);
+                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount()+1, listStd.get(i).getId(), strToday, countValue, "x");
+                            mDbHelper.addDiemDanh(dd);
+                        }
+                        else
+                        {
+                            String noiDung = "";
+                            for(int k=0;k<ghiChu.size();k++)
+                            {
+                                if(ghiChu.get(k).getId()==i)
+                                {
+                                    noiDung = ghiChu.get(k).getNoiDung();
+                                }
+                            }
+                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount()+1, listStd.get(i).getId(), strToday, countValue, noiDung);
+                            mDbHelper.addDiemDanh(dd);
                         }
                     }
 
@@ -279,11 +324,61 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
         count.setText(getString(R.string.count,countValue));
 
         numStudent = 0;
 
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.ghichu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.ghichu:
+                ShowCustomDialog(info.position);
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    private void ShowCustomDialog(final int pos)
+    {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_ghichu, null);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        final EditText TenLop = (EditText)mView.findViewById(R.id.tbghiChu);
+
+        Button btnOk = (Button)mView.findViewById(R.id.okLop);
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!TenLop.getText().toString().isEmpty() ) {
+                    GhiChu gc = new GhiChu(pos, TenLop.getText().toString());
+                    ghiChu.add(gc);
+                    Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
+
+                    //cập nhật
+                    dialog.cancel();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void ExportExcel()
@@ -292,16 +387,20 @@ public class MainActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
 
-        List<Students> list = mDbHelper.getAllNotes();
+        listStd.clear();
+        List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
 
-        ////////////////////////////////
-        final Cursor cursor = mDbHelper.getuser();
+        //Get all day of class
+        List<NgayDiemDanh> arrDays = new ArrayList<NgayDiemDanh>();
+        List<NgayDiemDanh> listDays = mDbHelper.getAllDays(currentClass);
+        arrDays.addAll(listDays);
 
         File sd = Environment.getExternalStorageDirectory();
-        String csvFile = "ĐiemDanh.xls";
 
-        File directory = new File(sd.getAbsolutePath());
+        String csvFile = currentClass + ".xls";
+
+        File directory = new File(sd.getAbsolutePath() + "/Điểm danh/");
         //create directory if not exist
         if (!directory.isDirectory()) {
             directory.mkdirs();
@@ -313,54 +412,46 @@ public class MainActivity extends AppCompatActivity {
             wbSettings.setLocale(new Locale("en", "EN"));
             WritableWorkbook workbook;
             workbook = Workbook.createWorkbook(file, wbSettings);
-            WritableSheet sheet = workbook.createSheet("CNPM Chuyên Sâu", 0);
+            WritableSheet sheet = workbook.createSheet(currentClass, 0);
             sheet.addCell(new Label(0, 0, "STT"));
             sheet.addCell(new Label(1, 0, "Mã số sinh viên"));
             sheet.addCell(new Label(2, 0, "Họ tên"));
-            sheet.addCell(new Label(3, 0, listStd.get(0).getLan1()));
-            sheet.addCell(new Label(4, 0, listStd.get(0).getLan2()));
-            sheet.addCell(new Label(5, 0, listStd.get(0).getLan3()));
-            sheet.addCell(new Label(6, 0, listStd.get(0).getLan4()));
-            sheet.addCell(new Label(7, 0, listStd.get(0).getLan5()));
-            sheet.addCell(new Label(8, 0, listStd.get(0).getLan6()));
-
-            if (cursor.moveToFirst()) {
-                do {
-                    String id = cursor.getString(cursor.getColumnIndex("Id"));
-                    String mssv = cursor.getString(cursor.getColumnIndex("Mssv"));
-                    String name = cursor.getString(cursor.getColumnIndex("Name"));
-                    String lan1 = cursor.getString(cursor.getColumnIndex("Lan1"));
-                    String lan2 = cursor.getString(cursor.getColumnIndex("Lan2"));
-                    String lan3 = cursor.getString(cursor.getColumnIndex("Lan3"));
-                    String lan4 = cursor.getString(cursor.getColumnIndex("Lan4"));
-                    String lan5 = cursor.getString(cursor.getColumnIndex("Lan5"));
-                    String lan6 = cursor.getString(cursor.getColumnIndex("Lan6"));
-
-                    if(!mssv.isEmpty()) {
-                        int i = cursor.getPosition() + 1;
-                        sheet.addCell(new Label(0, i, id));
-                        sheet.addCell(new Label(1, i, mssv));
-                        sheet.addCell(new Label(2, i, name));
-                        if (!lan1.isEmpty())
-                            sheet.addCell(new Label(3, i, "x"));
-                        if (!lan2.isEmpty())
-                            sheet.addCell(new Label(4, i, "x"));
-                        if (!lan3.isEmpty())
-                            sheet.addCell(new Label(5, i, "x"));
-                        if (!lan4.isEmpty())
-                            sheet.addCell(new Label(6, i, "x"));
-                        if (!lan5.isEmpty())
-                            sheet.addCell(new Label(7, i, "x"));
-                        if (!lan6.isEmpty())
-                            sheet.addCell(new Label(8, i, "x"));
-                    }
-                } while (cursor.moveToNext());
+            for(int i=0;i<arrDays.size();i++)
+            {
+                sheet.addCell(new Label(i+3, 0, arrDays.get(i).getDay()));
+                for(int j=0;j<arrDays.get(i).getLan();j++)
+                {
+                    sheet.addCell(new Label(j+3, 1, "Lần " + String.valueOf(j+1)));
+                }
             }
 
-            cursor.close();
+            for(int i=0;i<listStd.size();i++)
+            {
+                String id = String.valueOf(i+1);
+                String mssv = listStd.get(i).getMssv();
+                String name = listStd.get(i).getName();
+                List<DiemDanh> arrDD = new ArrayList<DiemDanh>();
+                List<DiemDanh> listDD = mDbHelper.getAllDiemDanh(listStd.get(i).getId());
+                arrDD.addAll(listDD);
+
+                sheet.addCell(new Label(0, i+2, id));
+                sheet.addCell(new Label(1, i+2, mssv));
+                sheet.addCell(new Label(2, i+2, name));
+                for(int j=0;j<arrDD.size();j++)
+                {
+                    sheet.addCell(new Label(j+3, i+2, arrDD.get(j).getGhichu()));
+                }
+            }
+
             workbook.write();
             workbook.close();
             Toast.makeText(getApplicationContext(), getString(R.string.exportSuccess), Toast.LENGTH_SHORT).show();
+
+            Uri selectedUri = Uri.parse(Environment.getExternalStorageDirectory() + "/Điểm danh/");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(selectedUri, "resource/folder");
+            startActivity(Intent.createChooser(intent, "Open folder"));
+
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -376,9 +467,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.importExcel:
-                Toast.makeText(getApplicationContext(),"Nhập excel",Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.exportExcel:
                 ExportExcel();
                 return true;
@@ -432,9 +520,9 @@ public class MainActivity extends AppCompatActivity {
                 if(CheckStudent(device.getAddress())!=-1) {
                     int check = CheckStudent(device.getAddress());
                     mDevicesListView.setItemChecked(check, true);
-                    listStd.get(check+1).setActive(true);
+                    listStd.get(check).setActive(true);
                     numStudent++;
-                    status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
+                    status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
                 }
             }
         }
@@ -442,34 +530,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void Reset()
     {
+        ghiChu.clear();
         numStudent = 0;
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
 
-        List<Students> list = mDbHelper.getAllNotes();
+        List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
-        status.setText(getString(R.string.numStudent, numStudent, listStd.size()-1));
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
 
-        for(int i=1;i<listStd.size();i++) {
+        for(int i=0;i<listStd.size();i++) {
             listStd.get(i).setActive(false);
-            mDevicesListView.setItemChecked(i-1, false);
+            mDevicesListView.setItemChecked(i, false);
         }
     }
 
     private void listStudent(View view){
         Reset();
 
-        for(int i=1;i<listStd.size();i++) {
+        for(int i=0;i<listStd.size();i++) {
             mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
         }
         mBTArrayAdapter.notifyDataSetChanged();
 
         if(mBTAdapter.isDiscovering()){
-			unregisterReceiver(blReceiver);
             mBTAdapter.cancelDiscovery();
-            Toast.makeText(getApplicationContext(),"Dừng quét",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Đã dừng quét",Toast.LENGTH_SHORT).show();
         }
-        else{
+        else
+        {
             if(mBTAdapter.isEnabled()) {
                 mBTAdapter.startDiscovery();
                 Toast.makeText(getApplicationContext(), "Bắt đầu quét", Toast.LENGTH_SHORT).show();
@@ -493,19 +582,18 @@ public class MainActivity extends AppCompatActivity {
 
         Intent i = new Intent(MainActivity.this, DsClass.class);
         MainActivity.this.startActivity(i);
-        lop.setText("CNPMCS");//set lại lớp đang điểm danh
     }
 
     private int CheckStudent(String str)
     {
         int ck = -1;
-        for(int i=1;i<listStd.size();i++) {
+        for(int i=0;i<listStd.size();i++) {
             if(str.equals(listStd.get(i).getMac1()) || str.equals(listStd.get(i).getMac2()))
             {
                 ck = i;
             }
         }
-        return ck-1;
+        return ck;
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
