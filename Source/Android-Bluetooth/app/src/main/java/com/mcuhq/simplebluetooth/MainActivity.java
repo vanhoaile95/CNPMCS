@@ -418,10 +418,20 @@ public class MainActivity extends AppCompatActivity {
             sheet.addCell(new Label(2, 0, "Họ tên"));
             for(int i=0;i<arrDays.size();i++)
             {
-                sheet.addCell(new Label(i+3, 0, arrDays.get(i).getDay()));
+                int column = 0;
+                if(i==0) {
+                    column = i + 3;
+                    sheet.addCell(new Label(column, 0, arrDays.get(i).getDay()));
+                }
+                else
+                {
+                    column = i + 3 + arrDays.get(i-1).getLan() - 1;
+                    sheet.addCell(new Label(column, 0, arrDays.get(i).getDay()));
+                }
+
                 for(int j=0;j<arrDays.get(i).getLan();j++)
                 {
-                    sheet.addCell(new Label(j+3, 1, "Lần " + String.valueOf(j+1)));
+                    sheet.addCell(new Label(j + column, 1, "Lần " + String.valueOf(j + 1)));
                 }
             }
 

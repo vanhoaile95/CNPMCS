@@ -167,8 +167,6 @@ public class Dssv extends AppCompatActivity {
             fileListNode.add(file.getName());
         }
 
-
-
         ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, fileListNode);
         dialog_ListView.setAdapter(directoryList);
@@ -178,8 +176,6 @@ public class Dssv extends AppCompatActivity {
     private void readExcel(String fileExcel)
     {
         try {
-
-
             FileInputStream file = new FileInputStream(new File(fileExcel));
             XSSFWorkbook wb = new XSSFWorkbook(file);
 
@@ -201,7 +197,6 @@ public class Dssv extends AppCompatActivity {
             rows.next();
             rows.next();
 
-
             while (rows.hasNext())
             {
                 row=(XSSFRow) rows.next();
@@ -216,14 +211,10 @@ public class Dssv extends AppCompatActivity {
                 if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING)
                 {
                     mssv=cell.getStringCellValue();
-
-
                 }
                 else if(cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
                 {
                     mssv=String.valueOf(cell.getNumericCellValue());
-
-
                 }
                 else
                 {
@@ -235,14 +226,10 @@ public class Dssv extends AppCompatActivity {
                 if (cell.getCellType() == XSSFCell.CELL_TYPE_STRING)
                 {
                     name=cell.getStringCellValue();
-
-
                 }
                 else if(cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC)
                 {
                     name=String.valueOf(cell.getNumericCellValue());
-
-
                 }
                 else
                 {
@@ -252,12 +239,15 @@ public class Dssv extends AppCompatActivity {
                 if(mssv.equals("") || name.equals(""))
                     break;
 
-                arrStudent.add(mssv+ "    "+ name);
-                arrStudent.notifyDataSetChanged();
+                listAllStd.clear();
+                List<Students> list = mDbHelper.getAllStudents();
+                listAllStd.addAll(list);
 
+                Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv, name, MainActivity.currentClass);
+                mDbHelper.addStudent(std);
+
+                LoadData();
             }
-
-
         }
 
         catch (Exception e)
@@ -265,7 +255,6 @@ public class Dssv extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Không đọc được file "+excelFile,
                     Toast.LENGTH_LONG).show();
         }
-
     }
 
 
