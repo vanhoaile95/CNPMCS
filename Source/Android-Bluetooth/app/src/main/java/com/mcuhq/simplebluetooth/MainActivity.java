@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
 
+        //////////////////////////////////////////////////////////////////////
 
         mHandler = new Handler(){
             public void handleMessage(android.os.Message msg){
@@ -324,11 +325,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+        status.setText("");
         count.setText(getString(R.string.count,countValue));
 
         numStudent = 0;
-
     }
 
     @Override
@@ -581,14 +581,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dssv(View view){
-        listStd.clear();
-        mBTArrayAdapter.clear();
+        Reset();
+        status.setText("");
 
         Intent i = new Intent(MainActivity.this, Dssv.class);
         MainActivity.this.startActivity(i);
     }
 
-    private void dsLop(View view){
+    private void dsLop(View view)
+    {
+        Reset();
+        status.setText("");
 
         Intent i = new Intent(MainActivity.this, DsClass.class);
         MainActivity.this.startActivity(i);

@@ -73,6 +73,12 @@ public class DsClass extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        MainActivity.lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
+        this.finish();
+    }
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();

@@ -108,45 +108,46 @@ public class Dssv extends AppCompatActivity {
     {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        else {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_openfile, null);
+            mBuilder.setView(mView);
+            final AlertDialog dialog = mBuilder.create();
+            dialog.show();
 
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
-        View mView = getLayoutInflater().inflate(R.layout.dialog_openfile, null);
-        mBuilder.setView(mView);
-        final AlertDialog dialog = mBuilder.create();
-        dialog.show();
+            root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+            curFolder = root;
+            textFolder = (TextView) mView.findViewById(R.id.folder);
+            buttonUp = (Button) mView.findViewById(R.id.up);
+            buttonUp.setEnabled(false);
+            dialog_ListView = (ListView) mView.findViewById(R.id.dialoglist);
 
-        root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-        curFolder = root;
-        textFolder = (TextView) mView.findViewById(R.id.folder);
-        buttonUp = (Button) mView.findViewById(R.id.up);
-        buttonUp.setEnabled(false);
-        dialog_ListView = (ListView) mView.findViewById(R.id.dialoglist);
+            ListDir(curFolder);
 
-        ListDir(curFolder);
-
-        buttonUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ListDir(curFolder.getParentFile());
-            }
-        });
-
-        dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                File selected = new File(fileList.get(position));
-                if(selected.isDirectory()) {
-                    ListDir(selected);
-                } else {
-                    //Toast.makeText(getApplicationContext(), selected.toString() + " selected",
-                            //Toast.LENGTH_LONG).show();
-                    excelFile=selected.toString();
-
-                    dialog.cancel();
-                    readExcel(excelFile);
+            buttonUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ListDir(curFolder.getParentFile());
                 }
-            }
-        });
+            });
+
+            dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    File selected = new File(fileList.get(position));
+                    if (selected.isDirectory()) {
+                        ListDir(selected);
+                    } else {
+                        //Toast.makeText(getApplicationContext(), selected.toString() + " selected",
+                        //Toast.LENGTH_LONG).show();
+                        excelFile = selected.toString();
+
+                        dialog.cancel();
+                        readExcel(excelFile);
+                    }
+                }
+            });
+        }
     }
 
     void ListDir(File f) {
@@ -245,11 +246,10 @@ public class Dssv extends AppCompatActivity {
 
                 Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv, name, MainActivity.currentClass);
                 mDbHelper.addStudent(std);
-
-                LoadData();
             }
-        }
 
+            LoadData();
+        }
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(), "Không đọc được file "+excelFile,
