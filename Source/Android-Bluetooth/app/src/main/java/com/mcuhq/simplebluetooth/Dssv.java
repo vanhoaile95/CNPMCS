@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -102,12 +103,28 @@ public class Dssv extends AppCompatActivity {
             }
         });
 
-        arrStudent = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+        arrStudent = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
         listStudent = (ListView)findViewById(R.id.listStudent);
+        listStudent.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listStudent.setAdapter(arrStudent);
         registerForContextMenu(listStudent);
 
+
+
         LoadData();
+        listStudent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if (listStd.get(i).getMac1().isEmpty() && listStd.get(i).getMac2().isEmpty())
+                    listStudent.setItemChecked(i,false);
+                else
+                    listStudent.setItemChecked(i,true);
+
+            }
+        });
+
+
 
         //open file dialog
         btnAddExcel=(Button)findViewById(R.id.btnAddExcel);
@@ -153,6 +170,7 @@ public class Dssv extends AppCompatActivity {
                         {
                             if (!deviceAddress.equals(listStd.get(i).getMac2())) {
                                 listStd.get(i).setMac1(deviceAddress);
+
                                 Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -161,6 +179,7 @@ public class Dssv extends AppCompatActivity {
                             if (!deviceAddress.equals(listStd.get(i).getMac1()))
                             {
                                 listStd.get(i).setMac2(deviceAddress);
+
                                 Toast.makeText(getApplicationContext(),"Cập nhập Mac2 " + listStd.get(i).getName(),Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -460,6 +479,16 @@ public class Dssv extends AppCompatActivity {
         }
 
         arrStudent.notifyDataSetChanged();
+
+
+        for(int i = 0;i<listStd.size();i++)
+        {
+            if (listStd.get(i).getMac1().isEmpty() && listStd.get(i).getMac2().isEmpty())
+                listStudent.setItemChecked(i,false);
+            else
+                listStudent.setItemChecked(i,true);
+        }
+
     }
 
     private void ShowCustomDialog(final int type, final int pos)
