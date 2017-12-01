@@ -45,11 +45,13 @@ public class Dssv extends AppCompatActivity {
     private Button btnAddExcel;
     private Button btncapNhatDiaChiMac;
     private ListView listStudent;
+
     private ArrayAdapter<String> arrStudent;
     private String excelFile;
     List<Students> listStd = new ArrayList<Students>();
     List<Students> listAllStd = new ArrayList<Students>();
     FeedReaderDbHelper mDbHelper;
+
 
     //open file dialog
 
@@ -176,7 +178,24 @@ public class Dssv extends AppCompatActivity {
 
     private void readExcel(String fileExcel)
     {
+
+        final List<Students> listSV=new ArrayList<Students>();
+
         try {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
+            final View mView = getLayoutInflater().inflate(R.layout.dialog_dssv_import, null);
+            mBuilder.setView(mView);
+            final AlertDialog dialog = mBuilder.create();
+            dialog.show();
+
+             ListView listSVimprot=(ListView)mView.findViewById(R.id.list_dssv_import);
+             ArrayAdapter<String> arrSVImport=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
+            listSVimprot.setAdapter(arrSVImport);
+             TextView countSVImprot=(TextView)mView.findViewById(R.id.tvCountSVImport);
+             Button btnHuySVImport=(Button)mView.findViewById(R.id.btn_huy);
+             Button btnLuuSVImport=(Button)mView.findViewById(R.id.btn_luu);
+
+            //dọc file
             FileInputStream file = new FileInputStream(new File(fileExcel));
             XSSFWorkbook wb = new XSSFWorkbook(file);
 
@@ -239,16 +258,41 @@ public class Dssv extends AppCompatActivity {
 
                 if(mssv.equals("") || name.equals(""))
                     break;
-
+                arrSVImport.add(mssv+" - "+name);
                 listAllStd.clear();
                 List<Students> list = mDbHelper.getAllStudents();
                 listAllStd.addAll(list);
 
-                Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv, name, MainActivity.currentClass);
-                mDbHelper.addStudent(std);
+                Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() +listSV.size()+ 1, mssv, name, MainActivity.currentClass);
+                listSV.add(std);
+                countSVImprot.setText("Số Sinh Viên: "+listSV.size());
             }
+            arrSVImport.notifyDataSetChanged();
+            btnHuySVImport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LoadData();
+                    dialog.cancel();
 
-            LoadData();
+
+
+            }});
+
+            btnLuuSVImport.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    for(Students item : listSV)
+                    {
+                        mDbHelper.addStudent(item);
+                    }
+                    LoadData();
+                    dialog.cancel();
+
+                }});
+
+
+
+
         }
         catch (Exception e)
         {

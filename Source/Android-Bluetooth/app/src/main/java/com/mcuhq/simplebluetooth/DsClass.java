@@ -52,7 +52,7 @@ public class DsClass extends AppCompatActivity {
         listClass.setAdapter(listTenClass);
         registerForContextMenu(listClass);
         //
-        tvLopChon.setText("Lớp điểm danh: ");
+        tvLopChon.setText("Lớp điểm danh: "+ mDbHelper.getClassRoomON().getName());
         //load danh sách lớp
         LoadListClass();
 

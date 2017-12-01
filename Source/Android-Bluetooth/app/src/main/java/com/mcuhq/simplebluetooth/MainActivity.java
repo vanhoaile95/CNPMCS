@@ -149,6 +149,10 @@ public class MainActivity extends AppCompatActivity {
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         registerForContextMenu(mDevicesListView);
 
+        //lớp điểm danh
+        MainActivity.currentClass=mDbHelper.getClassRoomON().getName();
+        lop.setText("Lớp điểm danh: "+ MainActivity.currentClass);
+
         //Diem danh thu cong
         mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
