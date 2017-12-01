@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private Button dssv;
     private Button listStudent;
     private Button btnSave;
-    private BluetoothAdapter mBTAdapter;
+    private  BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
 
@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
+
 
         mDevicesListView = (ListView)findViewById(R.id.devicesListView);
         mDevicesListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -539,6 +540,11 @@ public class MainActivity extends AppCompatActivity {
                     status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
                 }
             }
+            //Nếu bluetooth tắt thì bật lại
+            else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+            {
+                mBTAdapter.startDiscovery();
+            }
         }
     };
 
@@ -569,14 +575,17 @@ public class MainActivity extends AppCompatActivity {
 
         if(mBTAdapter.isDiscovering()){
             mBTAdapter.cancelDiscovery();
+            unregisterReceiver(blReceiver);
             Toast.makeText(getApplicationContext(),"Đã dừng quét",Toast.LENGTH_SHORT).show();
         }
         else
         {
+
             if(mBTAdapter.isEnabled()) {
                 mBTAdapter.startDiscovery();
                 Toast.makeText(getApplicationContext(), "Bắt đầu quét", Toast.LENGTH_SHORT).show();
                 registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                registerReceiver(blReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
             }
             else{
                 Toast.makeText(getApplicationContext(), "Bluetooth chưa được bật", Toast.LENGTH_SHORT).show();
@@ -587,6 +596,16 @@ public class MainActivity extends AppCompatActivity {
     private void dssv(View view){
         Reset();
         status.setText("");
+
+        try{
+            if (mBTAdapter.isDiscovering())
+                mBTAdapter.cancelDiscovery();
+            unregisterReceiver(blReceiver);
+        }
+        catch (Exception e)
+        {}
+
+
 
         Intent i = new Intent(MainActivity.this, Dssv.class);
         MainActivity.this.startActivity(i);

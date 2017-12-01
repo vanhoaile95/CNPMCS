@@ -1,6 +1,12 @@
 package com.mcuhq.simplebluetooth;
 
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -41,6 +47,7 @@ import java.util.Iterator;
  */
 
 public class Dssv extends AppCompatActivity {
+    private  BluetoothAdapter mBTAdapter;
     private Button btnAdd;
     private Button btnAddExcel;
     private Button btncapNhatDiaChiMac;
@@ -77,7 +84,16 @@ public class Dssv extends AppCompatActivity {
 
         btnAdd = (Button)findViewById(R.id.btnAdd);
 
+
+        mBTAdapter = BluetoothAdapter.getDefaultAdapter();
         btncapNhatDiaChiMac=(Button)findViewById(R.id.capNhatDiaChiMac);
+        btncapNhatDiaChiMac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CapNhapDiaChiBlueTooth();
+            }
+        });
+
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,7 +120,95 @@ public class Dssv extends AppCompatActivity {
 
         //Toast.makeText(getApplicationContext(),root.toString(),Toast.LENGTH_SHORT).show();
     }
+    @Override
+    public void onBackPressed() {
+        try{
+            if (mBTAdapter.isDiscovering())
+                mBTAdapter.cancelDiscovery();
+            unregisterReceiver(blReceiver);
+        }
+        catch (Exception e)
+        {}
+        super.onBackPressed();
+    }
+    final  BroadcastReceiver blReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction(); //Get Action của bluetooth
 
+            //Nếu tìm thấy device
+            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+
+                String deviceName = device.getName();
+                String deviceAddress = device.getAddress();
+
+                for(int i=0;i<listStd.size();i++) {
+
+                    if (deviceName.contains(listStd.get(i).getMssv()))
+                    {
+
+                        if ( listStd.get(i).getMac1().isEmpty() )
+                        {
+                            if (!deviceAddress.equals(listStd.get(i).getMac2())) {
+                                listStd.get(i).setMac1(deviceAddress);
+                                Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else if (listStd.get(i).getMac2().isEmpty())
+                        {
+                            if (!deviceAddress.equals(listStd.get(i).getMac1()))
+                            {
+                                listStd.get(i).setMac2(deviceAddress);
+                                Toast.makeText(getApplicationContext(),"Cập nhập Mac2 " + listStd.get(i).getName(),Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
+                                , listStd.get(i).getMac1().toString(),listStd.get(i).getMac2().toString());
+                        mDbHelper.updateStudent(std);
+                        LoadData();
+                        break;
+                    }
+                }
+
+
+            }
+
+
+            //Nếu bluetooth tắt thì bật lại
+            else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action))
+            {
+                mBTAdapter.startDiscovery();
+            }
+
+        }
+    };
+
+    void CapNhapDiaChiBlueTooth()
+    {
+
+
+        if( mBTAdapter.isDiscovering()){
+            mBTAdapter.cancelDiscovery();
+            unregisterReceiver(blReceiver);
+            Toast.makeText(getApplicationContext(),"Đã dừng cập nhập",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if(mBTAdapter.isEnabled()) {
+
+                mBTAdapter.startDiscovery();
+                Toast.makeText(getApplicationContext(),"Đang cập nhập địa chỉ MAC",Toast.LENGTH_SHORT).show();
+                registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                registerReceiver(blReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Bluetooth chưa được bật", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
     //open file dialog
     private void ShowOpenFileDialog()
     {
