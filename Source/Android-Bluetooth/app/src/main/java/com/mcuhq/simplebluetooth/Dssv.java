@@ -170,6 +170,8 @@ public class Dssv extends AppCompatActivity {
                         LoadData();
                         break;
                     }
+                    if (i == listStd.size())
+                        Toast.makeText(getApplicationContext(), "Tìm thấy " + deviceName, Toast.LENGTH_SHORT).show();
                 }
 
 
