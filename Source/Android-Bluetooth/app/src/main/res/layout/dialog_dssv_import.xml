@@ -35,7 +35,7 @@
             android:layout_marginRight="11dp"
             android:layout_toLeftOf="@+id/btn_luu"
             android:layout_toStartOf="@+id/btn_luu"
-            android:width="170dp"
+            android:width="100dp"
             android:text="Hủy" />
 
         <Button
@@ -47,10 +47,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginEnd="11dp"
             android:layout_marginRight="15dp"
-            android:width="170dp"
+            android:width="100dp"
             android:text="Lưu" />
     </RelativeLayout>
-
-
-
 </LinearLayout>
