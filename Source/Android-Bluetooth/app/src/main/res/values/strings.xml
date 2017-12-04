@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Điểm Danh Bluetooth</string>
+    <string name="app_name">iBluetooth</string>
     <string name="del">Xóa</string>
     <string name="update">Sửa</string>
     <string name="select">Chọn lớp Điểm Danh</string>

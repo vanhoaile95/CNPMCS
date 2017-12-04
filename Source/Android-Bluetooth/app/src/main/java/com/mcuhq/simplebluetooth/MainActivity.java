@@ -174,7 +174,11 @@ public class MainActivity extends AppCompatActivity {
                         listStd.get(i).setActive(true);
                     }
                     else {
-                        mDevicesListView.setItemChecked(i, true);
+                        numStudent--;
+                        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+
+                        mDevicesListView.setItemChecked(i, false);
+                        listStd.get(i).setActive(false);
                     }
                 }
             }
