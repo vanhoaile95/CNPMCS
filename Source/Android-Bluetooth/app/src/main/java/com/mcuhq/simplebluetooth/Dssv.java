@@ -137,15 +137,20 @@ public class Dssv extends AppCompatActivity {
 
         //Toast.makeText(getApplicationContext(),root.toString(),Toast.LENGTH_SHORT).show();
     }
-    @Override
-    public void onBackPressed() {
+    public void ResetBlueTooth()
+    {
         try{
+
             if (mBTAdapter.isDiscovering())
                 mBTAdapter.cancelDiscovery();
             unregisterReceiver(blReceiver);
         }
         catch (Exception e)
         {}
+    }
+    @Override
+    public void onBackPressed() {
+        ResetBlueTooth();
         super.onBackPressed();
     }
     final  BroadcastReceiver blReceiver = new BroadcastReceiver() {
@@ -161,34 +166,36 @@ public class Dssv extends AppCompatActivity {
                 String deviceName = device.getName();
                 String deviceAddress = device.getAddress();
 
+
                 for(int i=0;i<listStd.size();i++) {
 
                     if (deviceName.contains(listStd.get(i).getMssv()))
                     {
+                            //Nếu Mac1 ko có và device address khác Mac2
+                        if ( listStd.get(i).getMac1().isEmpty() && !deviceAddress.equals(listStd.get(i).getMac2())) {
 
-                        if ( listStd.get(i).getMac1().isEmpty() )
-                        {
-                            if (!deviceAddress.equals(listStd.get(i).getMac2())) {
-                                listStd.get(i).setMac1(deviceAddress);
+                            listStd.get(i).setMac1(deviceAddress);
+                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
+                                    , listStd.get(i).getMac1().toString(), listStd.get(i).getMac2().toString());
+                            mDbHelper.updateStudent(std);
+                            LoadData();
+                            Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
 
-                                Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
-                            }
                         }
-                        else if (listStd.get(i).getMac2().isEmpty())
-                        {
-                            if (!deviceAddress.equals(listStd.get(i).getMac1()))
-                            {
-                                listStd.get(i).setMac2(deviceAddress);
+                            //Nếu Mac2 ko có và device address khác Mac1
+                        else if (listStd.get(i).getMac2().isEmpty() && !deviceAddress.equals(listStd.get(i).getMac1())) {
 
-                                Toast.makeText(getApplicationContext(),"Cập nhập Mac2 " + listStd.get(i).getName(),Toast.LENGTH_SHORT).show();
-                            }
+                            listStd.get(i).setMac2(deviceAddress);
+                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
+                                    , listStd.get(i).getMac1().toString(), listStd.get(i).getMac2().toString());
+                            mDbHelper.updateStudent(std);
+                            LoadData();
+                            Toast.makeText(getApplicationContext(), "Cập nhập Mac2 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
+
                         }
-                        Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
-                                , listStd.get(i).getMac1().toString(),listStd.get(i).getMac2().toString());
-                        mDbHelper.updateStudent(std);
-                        LoadData();
                         break;
                     }
+                    //Nếu tìm thấy device mà ko phải Sinh Vien
                     if (i == (listStd.size() - 1))
                         Toast.makeText(getApplicationContext(), "Tìm thấy " + deviceName, Toast.LENGTH_SHORT).show();
                 }
@@ -434,7 +441,9 @@ public class Dssv extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
+                ResetBlueTooth();
                 this.finish();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
