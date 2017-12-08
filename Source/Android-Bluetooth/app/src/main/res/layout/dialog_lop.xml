@@ -11,7 +11,7 @@
         android:ems="10"
         android:hint="@string/tenLop"
         android:inputType="textCapWords"
-        android:maxLength="8"
+        android:maxLength="200"
         android:singleLine="true" />
 
     <Button

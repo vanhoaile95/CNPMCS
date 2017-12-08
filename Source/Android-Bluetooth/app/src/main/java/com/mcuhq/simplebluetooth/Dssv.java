@@ -331,14 +331,14 @@ public class Dssv extends AppCompatActivity {
             FileInputStream file = new FileInputStream(new File(fileExcel));
             XSSFWorkbook wb = new XSSFWorkbook(file);
 
-            XSSFWorkbook test = new XSSFWorkbook();
+
 
             XSSFSheet sheet = wb.getSheetAt(0);
             XSSFRow row;
             XSSFCell cell;
 
             Iterator rows = sheet.rowIterator();
-            rows.next();
+            //bỏ 9 dòng đầu
             rows.next();
             rows.next();
             rows.next();
@@ -398,7 +398,9 @@ public class Dssv extends AppCompatActivity {
                 Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() +listSV.size()+ 1, mssv, name, MainActivity.currentClass);
                 listSV.add(std);
                 countSVImprot.setText("Số Sinh Viên: "+listSV.size());
+
             }
+            
             arrSVImport.notifyDataSetChanged();
             btnHuySVImport.setOnClickListener(new View.OnClickListener() {
                 @Override

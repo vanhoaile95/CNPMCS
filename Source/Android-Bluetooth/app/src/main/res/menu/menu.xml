@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/exportExcel"
-        android:title="@string/exportExcel"/>
+        android:title="Xuất file Excel có sẳn"/>
+    <item android:id="@+id/exportExcelNew"
+        android:title="Xuất file Excel mới"/>
+    <item android:id="@+id/huongdan"
+        android:title="Hướng Dẫn"/>
 </menu>

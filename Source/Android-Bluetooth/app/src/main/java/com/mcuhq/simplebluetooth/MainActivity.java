@@ -41,6 +41,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -58,6 +60,11 @@ import java.util.UUID;
 
 import com.mcuhq.simplebluetooth.FeedReaderDbHelper;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.w3c.dom.Text;
 
 import jxl.Workbook;
@@ -110,6 +117,20 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPref;
     List<GhiChu> ghiChu = new ArrayList<GhiChu>();
     int pos;
+
+    //
+    Button buttonUp;
+    TextView textFolder;
+
+    String KEY_TEXTPSS = "TEXTPSS";
+    static final int CUSTOM_DIALOG_ID = 0;
+    ListView dialog_ListView;
+    private ArrayAdapter<String> arrLisFolder;
+    File root;
+    File curFolder;
+    private List<String> fileList = new ArrayList<String>();
+    String excelFile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -476,6 +497,195 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void ExportExcel(String excelpath, String folder)
+    {
+        try
+        {
+            //Toast.makeText(getApplicationContext(),"Chọn file danh sách lớp cần xuất vào" , Toast.LENGTH_LONG).show();
+            listStd.clear();
+            List<Students> list = mDbHelper.getListStudents(currentClass);
+            listStd.addAll(list);
+
+            //Get all day of class
+            List<NgayDiemDanh> arrDays = new ArrayList<NgayDiemDanh>();
+            List<NgayDiemDanh> listDays = mDbHelper.getAllDays(currentClass);
+            arrDays.addAll(listDays);
+
+
+            FileInputStream file = new FileInputStream(new File(excelpath));
+            XSSFWorkbook wb = new XSSFWorkbook(file);
+
+            XSSFSheet sheet = wb.getSheetAt(0);
+            XSSFRow row;
+            XSSFCell cell;
+
+            XSSFCell cellNew;
+
+            Iterator rows = sheet.rowIterator();
+            //bỏ 9 dòng đầu
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            rows.next();
+            row=(XSSFRow) rows.next();//dòng head
+
+
+
+            int cellnum=4;
+            for(int i=0;i<arrDays.size();i++)
+            {
+
+                for(int j=0;j<arrDays.get(i).getLan();j++)
+                {
+                    cellNew = row.createCell(cellnum++, XSSFCell.CELL_TYPE_STRING);
+                    cellNew.setCellValue(arrDays.get(i).getDay()+"\nLần " + String.valueOf(j + 1));
+                    sheet.setColumnWidth(cellnum-1,4500);
+                }
+            }
+
+
+            cellnum=4;
+            for(int i=0;i<listStd.size();i++) {
+                if(rows.hasNext()) {
+                    row = (XSSFRow) rows.next();
+
+                    Iterator cells = row.cellIterator();
+
+                    cells.next();//số thứ tự
+
+
+                    String mssv = listStd.get(i).getMssv();
+                    String name = listStd.get(i).getName();
+                    List<DiemDanh> arrDD = new ArrayList<DiemDanh>();
+                    List<DiemDanh> listDD = mDbHelper.getAllDiemDanh(listStd.get(i).getId());
+                    arrDD.addAll(listDD);
+
+                    cell = (XSSFCell) cells.next();//mã số sinh viên
+
+
+                    cell.setCellValue(mssv);
+
+                    cell = (XSSFCell) cells.next();//tên
+
+                    cell.setCellValue(name);
+
+                    for (int j = 0; j < arrDD.size(); j++) {
+
+                        cellNew = row.createCell(cellnum++, XSSFCell.CELL_TYPE_STRING);
+                        cellNew.setCellValue(arrDD.get(j).getGhichu());
+
+                    }
+                    cellnum = 4;
+                }
+            }
+            while(rows.hasNext()) {
+                row = (XSSFRow) rows.next();
+
+                Iterator cells = row.cellIterator();
+
+                cells.next();//số thứ tự
+                cell = (XSSFCell) cells.next();//mã số sinh viên
+
+
+                cell.setCellValue("");
+
+                cell = (XSSFCell) cells.next();//tên
+
+                cell.setCellValue("");
+            }
+            File fileĐiemanh = new File(folder+"/"+currentClass+"DiemDanh.xlsx");
+            fileĐiemanh.getParentFile().mkdirs();
+
+            FileOutputStream outFile = new FileOutputStream(fileĐiemanh);
+            wb.write(outFile);
+
+            Uri selectedUri = Uri.parse(folder+"/"+currentClass+"DiemDanh.xlsx");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(selectedUri, "resource/folder");
+            startActivity(Intent.createChooser(intent, "Open file"));
+        }
+        catch (Exception e)
+        {
+
+        }
+
+
+
+    }
+
+    private void ShowOpenFileDialog()
+    {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        else {
+            AlertDialog.Builder mBuilder = new AlertDialog.Builder(MainActivity.this);
+            View mView = getLayoutInflater().inflate(R.layout.dialog_openfile, null);
+            mBuilder.setView(mView);
+            final AlertDialog dialog = mBuilder.create();
+            dialog.show();
+
+            root = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
+            curFolder = root;
+            textFolder = (TextView) mView.findViewById(R.id.folder);
+            buttonUp = (Button) mView.findViewById(R.id.up);
+            buttonUp.setEnabled(false);
+            dialog_ListView = (ListView) mView.findViewById(R.id.dialoglist);
+
+            ListDir(curFolder);
+
+            buttonUp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ListDir(curFolder.getParentFile());
+                }
+            });
+
+            dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    File selected = new File(fileList.get(position));
+                    if (selected.isDirectory()) {
+                        ListDir(selected);
+                    } else {
+                        //Toast.makeText(getApplicationContext(), selected.toString() + " selected",
+                        //Toast.LENGTH_LONG).show();
+                        excelFile = selected.toString();
+
+                        dialog.cancel();
+                        ExportExcel(excelFile,curFolder.getPath());
+                    }
+                }
+            });
+        }
+    }
+
+    void ListDir(File f) {
+        if(f.equals(root)) {
+            buttonUp.setEnabled(false);
+        } else {
+            buttonUp.setEnabled(true);
+        }
+
+        curFolder = f;
+        textFolder.setText(f.getPath());
+
+        File[] files = f.listFiles();
+        fileList.clear();
+        List<String> fileListNode= new ArrayList<String>();
+        for(File file : files) {
+            fileList.add(file.getPath());
+            fileListNode.add(file.getName());
+        }
+
+        ArrayAdapter<String> directoryList = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, fileListNode);
+        dialog_ListView.setAdapter(directoryList);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -487,6 +697,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.exportExcel:
+                //ExportExcel();
+                ShowOpenFileDialog();
+                return true;
+            case R.id.exportExcelNew:
                 ExportExcel();
                 return true;
             default:
