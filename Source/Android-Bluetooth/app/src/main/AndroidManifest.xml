@@ -35,6 +35,9 @@
 
         <activity android:name= ".DsClass"
             android:label="Danh Sách Lớp"> </activity>
+
+        <activity android:name= ".HuongDan"
+            android:label="Giới thiệu"> </activity>
     </application>
 
 </manifest>

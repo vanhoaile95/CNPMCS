@@ -415,9 +415,14 @@ public class Dssv extends AppCompatActivity {
             btnLuuSVImport.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     for(Students item : listSV)
                     {
-                        mDbHelper.addStudent(item);
+                        if(!checkSV(item))
+                        {
+                            mDbHelper.addStudent(item);
+                        }
+
                     }
                     LoadData();
                     dialog.cancel();
@@ -435,7 +440,16 @@ public class Dssv extends AppCompatActivity {
         }
     }
 
-
+public boolean checkSV(Students std)
+{
+    List<Students> list = mDbHelper.getListStudents(MainActivity.currentClass);
+    for(Students item : list)
+    {
+        if(item.getMssv().equals(std.getMssv()))
+            return true;
+    }
+    return false;
+}
 /////////////////////////////////////////////////////
 
     @Override
@@ -536,7 +550,11 @@ public class Dssv extends AppCompatActivity {
 
                         Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString(),
                                 MainActivity.currentClass, mac1.getText().toString(), mac2.getText().toString());
-                        mDbHelper.addStudent(std);
+                        if(!checkSV(std))
+                        {
+                            mDbHelper.addStudent(std);
+                        }
+
                         Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
                     } else {
                         Students std = new Students(listStd.get(pos).getId(), mssv.getText().toString(), name.getText().toString()

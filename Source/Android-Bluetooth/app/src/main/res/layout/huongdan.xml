@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Content here -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/ibluetooth" />
+
+            <TextView
+                android:id="@+id/gioithieu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Giới Thiệu"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold|italic" />
+
+            <TextView
+                android:id="@+id/huongdan1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="iBluetooth là một ứng dụng giúp giáo viên quản lí điểm danh của lớp học. Thay vì phải điểm danh truyền thống bằng cách đọc tên - đánh dấu vào sổ rồi lưu trữ lại (có thể sẽ bị thất thoát dữ liệu và mất công sức), thì giờ đây chỉ cần check qua bluetooth của học viên là dữ liệu thông tin học viên đó được tự động cập nhật vào hệ thống và lưu trữ lại."
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp"
+
+                />
+
+            <TextView
+                android:id="@+id/temp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+
+                android:text="~~~~~~~~~~~~"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="20dp"
+
+                />
+
+
+            <TextView
+                android:id="@+id/huongdan2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Hướng dẫn"
+                android:textAlignment="center"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="30dp"
+                android:textStyle="bold|italic" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image1" />
+            <TextView
+                android:id="@+id/manhinhchinh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Màn hình chính"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="15dp"
+                 />
+
+            <TextView
+                android:id="@+id/quanlilop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Quản lí lớp"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/huongdan3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Từ màn hình chính nhấn vào button DANH SACH LỚP HỌC đề vào màn hình quản lí danh sách lớp."
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image3" />
+
+            <TextView
+                android:id="@+id/manhinhquanlilop"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Màn hình quản lí danh sách lớp"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Bạn nhấn vào button THÊM LỚP HỌC để thêm 1 lớp
+Ấn chọn 1 lớp bất kì trong dánh sách lớp, menu ẩn sẽ xuất hiện, menu ẩn gồm có sửa, xóa và chọn lớp điểm danh."
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/quanliSV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Quản lí học viên"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/huongdan14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Từ màn hình chính nhấn vào button DANH SÁCH SINH VIÊN đề vào màn hình quản lí danh sách học viên của lớp đang điểm danh."
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image6" />
+
+            <TextView
+                android:id="@+id/manhinhquanSV"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Màn hình quản lí danh học viên"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Nhấn vào button THÊM SINH VIÊN TỪ FILE EXCEL rồi chọn đường dẫn file excel danh sách sinh viên để nhâp sinh viên vào lớp đang điểm danh"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+            android:id="@+id/huongdan8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:text="Nhấn vào button THÊM SINH VIÊN để thêm một sinh viên"
+            android:textColor="@color/colorText"
+            android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Nhấn vào button CẤP NHẬT ĐỊA CHỈ BLUETOOTH để cập nhật địa chỉ bluetooth cho từng sinh viên trong danh sách lớp"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Chú ý:"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/huongdan11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Để cập nhật địa chỉ bluetooth cho học viên thì tên bluetooth của thiết bị học viên phải có xuất hiện mã số sinh viên của học viên đó, mỗi học viên có tối đa 2 địa chỉ bluetooth"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/huongdan12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Để đổi tên bluetooth, học viên mở thiết bị di động của mình, vào cài đặt>>thông tin thiết bị>> thay đổi tên thiết bị hoặc có thể thay đổi ở mục quản lí bluetooth của thiết bị đó"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Để xem tên địa chị MAC bluetooth của thiết bị: vào cài đặt>>thông tin thiết bị>> địa chỉ MAC bluetooth"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/diemdanh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Điểm danh"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/huongdan15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Ứng dụng hổ trợ 2 hình thức danh là điểm danh thủ công và điểm danh tự động quét bluetooth"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image1" />
+
+            <TextView
+                android:id="@+id/manhinhdiemdanh"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Màn hình chính"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Điểm danh tự đông:"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/huongdan16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Người dụng bật bluetooth của thiết lên và chọn lớp điểm danh(ở phần quản lí danh sách lớp học) sau đó nhấn nút điểm danh, ứng dụng sẽ quét liên tục tới khi nào người dùng bấm nút điểm danh lần 2."
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+            <TextView
+                android:id="@+id/huongdan17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Điểm danh thủ công"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Người dùng bật chế độ điểm danh thủ công và nhấn vào dấu tick ở sinh viên nào muốn điểm danh, có thể tìm sinh viên bằng cách nhập mã số sinh viên vào ô tìm kiếm."
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Trong quá trình điểm danh, người dùng có thể thêm ghi chú cho sinh viên bằng cách ấn chọn sinh viên đó trong danh sách ddiemr danh."
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Sau khi điểm danh, người dùng nhấn lưu kết quả thì số lần điểm danh sẽ tự động tăng thêm 1 lần. Nếu không lưu thì quá trình điểm danh bị xóa bỏ."
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/xuatdiemdanh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Xuất kết quả điểm danh"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/huongdan20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:text="Người dùng nhấn vào menu bên phải màn hình chính để hiện menu xuất điểm danh, ứng dụng hổ trợ 2 loại, 1 là xuất ra  file excel mới, 2 là xuất vào file đã import"
+                android:textColor="@color/colorAccent"
+                android:textSize="15dp" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image2" />
+
+            <TextView
+                android:id="@+id/manhinhXuatDiemDanh"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="menu xuất điểm danh"
+                android:textAlignment="center"
+                android:textColor="@color/colorText"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/huongdan22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:ellipsize="end"
+                android:text="Chúc bạn thành công !"
+                android:textAlignment="center"
+                android:textColor="@color/colorGioiThieu"
+                android:textSize="20dp"
+                android:textStyle="bold|italic" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

@@ -5,5 +5,5 @@
     <item android:id="@+id/exportExcelNew"
         android:title="Xuất file Excel mới"/>
     <item android:id="@+id/huongdan"
-        android:title="Hướng Dẫn"/>
+        android:title="Giới thiệu"/>
 </menu>

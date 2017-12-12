@@ -703,6 +703,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.exportExcelNew:
                 ExportExcel();
                 return true;
+            case R.id.huongdan:
+                Intent i = new Intent(MainActivity.this, HuongDan.class);
+                MainActivity.this.startActivity(i);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
