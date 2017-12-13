@@ -875,6 +875,7 @@ public class MainActivity extends AppCompatActivity {
             mBTAdapter.cancelDiscovery();
             unregisterReceiver(blReceiver);
             Toast.makeText(getApplicationContext(),"Đã dừng quét",Toast.LENGTH_SHORT).show();
+            listStudent.setText("Điểm danh");
         }
         else
         {
@@ -882,6 +883,7 @@ public class MainActivity extends AppCompatActivity {
             if(mBTAdapter.isEnabled()) {
                 mBTAdapter.startDiscovery();
                 Toast.makeText(getApplicationContext(), "Bắt đầu quét", Toast.LENGTH_SHORT).show();
+                listStudent.setText("Dừng điểm danh");
                 registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
                 registerReceiver(blReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
             }
