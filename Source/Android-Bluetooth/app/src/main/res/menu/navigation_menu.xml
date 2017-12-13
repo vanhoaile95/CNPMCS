@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/LopHoc"
+        android:title="Lớp học"
+        android:icon="@drawable/ic_group_work_black_24dp"
+        >
+
+    </item>
+    <item
+        android:id="@+id/SinhVien"
+        android:title="Sinh viên"
+        android:icon = "@drawable/ic_person_black_24dp">
+    </item>
+
+    <item
+        android:id="@+id/gioithieu"
+        android:title="Giới thiệu"
+        android:icon = "@drawable/ic_info_black_24dp">
+    </item>
+
+
+
+
+</menu>

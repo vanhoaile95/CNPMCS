@@ -3,32 +3,48 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
-
-
-    <Button
-        android:id="@+id/btnAddExcel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm sinh viên từ file Excel" />
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    >
 
 
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/addStudent" />
-
-    <Button
-        android:id="@+id/capNhatDiaChiMac"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cập Nhật địa chỉ Bluetooth" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="380dp"
         android:id="@+id/listStudent"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm sinh viên"
+        android:textColor="#FFFF"
+        android:backgroundTint="@color/colorPrimary"
+        >
+    </android.support.v7.widget.AppCompatButton>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnAddExcel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm sinh viên từ Excel"
+        android:textColor="#FFFF"
+        android:backgroundTint="@color/colorPrimary"
+        >
+    </android.support.v7.widget.AppCompatButton>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/capNhatDiaChiMac"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cập nhập địa chỉ MAC"
+        android:textColor="#FFFF"
+        android:backgroundTint="@color/colorPrimary"
+        >
+    </android.support.v7.widget.AppCompatButton>
 
 </LinearLayout>

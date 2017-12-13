@@ -21,7 +21,10 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:design:23.3.0'
+
     compile files('libs/jxl.jar')
     implementation files('libs/aa-poi-3.10-min-0.1.5.jar')
     implementation files('libs/aa-poi-ooxml-schemas-3.10-reduced-more-0.1.5.jar')
+    compile 'pl.bclogic:pulsator4droid:1.0.3'
 }

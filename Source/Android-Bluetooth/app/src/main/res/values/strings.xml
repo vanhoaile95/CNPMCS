@@ -31,4 +31,6 @@
 
     <string name="exportSuccess">Xuất dữ liệu thành công</string>
     <string name="ghichu">Thêm ghi chú</string>
+    <string name="Open">iBluetooth</string>
+    <string name="Close">iBluetooth</string>
 </resources>

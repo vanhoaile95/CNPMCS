@@ -16,12 +16,16 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.CircularPropagation;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -58,6 +62,8 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
+
+
 import com.mcuhq.simplebluetooth.FeedReaderDbHelper;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -72,6 +78,7 @@ import jxl.WorkbookSettings;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
+import pl.bclogic.pulsator4droid.library.PulsatorLayout;
 
 import static jxl.Workbook.*;
 
@@ -92,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
     private  BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
+    private DrawerLayout dl;
+    private ActionBarDrawerToggle abdt;
+
 
     //Search
     private EditText editMsssv;
@@ -136,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         countValue = sharedPref.getInt("Count", 1);
@@ -152,6 +163,42 @@ public class MainActivity extends AppCompatActivity {
         List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
 
+
+
+
+        dl = (DrawerLayout)findViewById(R.id.dl);
+        abdt = new ActionBarDrawerToggle(this ,dl,R.string.Open,R.string.Close);
+        abdt.setDrawerIndicatorEnabled(true);
+        dl.addDrawerListener(abdt);
+
+
+        NavigationView nav_view = (NavigationView)findViewById(R.id.nav_view);
+
+        nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.LopHoc)
+                {
+                    dl.closeDrawers();
+                    dsLop();
+                }
+                else if (id == R.id.SinhVien)
+                {
+                    dl.closeDrawers();
+                    dssv();
+                }
+                else if (id == R.id.gioithieu)
+                {
+                    dl.closeDrawers();
+                    Intent i = new Intent(MainActivity.this, HuongDan.class);
+                    MainActivity.this.startActivity(i);
+                }
+
+                return true;
+            }
+        });
+
         count = (TextView)findViewById(R.id.count);
         today = (TextView)findViewById(R.id.today);
         status = (TextView)findViewById(R.id.status);
@@ -161,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         lop=(TextView)findViewById(R.id.tbTenLop);
         listStudent = (Button)findViewById(R.id.listStudent);
         btnSave = (Button)findViewById(R.id.save);
+
 
         mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
@@ -327,14 +375,14 @@ public class MainActivity extends AppCompatActivity {
         dssv.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                dssv(v);
+                dssv();
             }
         });
 
         dsLop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dsLop(v);
+                dsLop();
             }
         });
 
@@ -355,12 +403,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
         status.setText("");
         count.setText(getString(R.string.count,countValue));
 
         numStudent = 0;
     }
 
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        abdt.syncState();
+    }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -379,6 +435,7 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onContextItemSelected(item);
     }
+
 
     private void ShowCustomDialog(final int pos)
     {
@@ -709,7 +766,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             default:
-                return super.onOptionsItemSelected(item);
+                return  abdt.onOptionsItemSelected(item)|| super.onOptionsItemSelected(item);
         }
     }
 
@@ -761,6 +818,7 @@ public class MainActivity extends AppCompatActivity {
                     listStd.get(check).setActive(true);
                     numStudent++;
                     status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
+                    Toast.makeText(getApplicationContext(), "Có mặt " + listStd.get(check).getName(), Toast.LENGTH_SHORT).show();
                 }
             }
             //Nếu bluetooth tắt thì bật lại
@@ -770,6 +828,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        try{
+
+            if (mBTAdapter.isDiscovering())
+                mBTAdapter.cancelDiscovery();
+            unregisterReceiver(blReceiver);
+        }
+        catch (Exception e)
+        {}
+        super.onBackPressed();
+    }
 
     private void Reset()
     {
@@ -789,12 +860,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void listStudent(View view){
-        Reset();
 
-        for(int i=0;i<listStd.size();i++) {
-            mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
+        if (mBTArrayAdapter.getCount() == 0) {
+            Reset();
+            for (int i = 0; i < listStd.size(); i++) {
+                mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
+            }
+            mBTArrayAdapter.notifyDataSetChanged();
         }
-        mBTArrayAdapter.notifyDataSetChanged();
+
+
 
         if(mBTAdapter.isDiscovering()){
             mBTAdapter.cancelDiscovery();
@@ -816,7 +891,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void dssv(View view){
+    private void dssv(){
         Reset();
         status.setText("");
 
@@ -834,7 +909,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.this.startActivity(i);
     }
 
-    private void dsLop(View view)
+    private void dsLop()
     {
         Reset();
         status.setText("");

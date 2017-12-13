@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,15 +19,20 @@
         android:maxLines="1"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnAddClass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/addClass" />
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="460dp"
         android:id="@+id/listClass"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btnAddClass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thêm lớp học"
+        android:textColor="#FFFF"
+        android:backgroundTint="@color/colorPrimary"
+        >
+    </android.support.v7.widget.AppCompatButton>
 
 </LinearLayout>

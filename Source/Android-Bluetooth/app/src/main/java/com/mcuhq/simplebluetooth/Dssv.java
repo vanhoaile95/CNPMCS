@@ -1,10 +1,12 @@
 package com.mcuhq.simplebluetooth;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -53,7 +55,6 @@ public class Dssv extends AppCompatActivity {
     private Button btnAddExcel;
     private Button btncapNhatDiaChiMac;
     private ListView listStudent;
-
     private ArrayAdapter<String> arrStudent;
     private String excelFile;
     List<Students> listStd = new ArrayList<Students>();
@@ -135,7 +136,7 @@ public class Dssv extends AppCompatActivity {
             }
         });
 
-        //Toast.makeText(getApplicationContext(),root.toString(),Toast.LENGTH_SHORT).show();
+
     }
     public void ResetBlueTooth()
     {
@@ -277,7 +278,11 @@ public class Dssv extends AppCompatActivity {
                         excelFile = selected.toString();
 
                         dialog.cancel();
+
                         readExcel(excelFile);
+
+
+
                     }
                 }
             });
@@ -314,11 +319,14 @@ public class Dssv extends AppCompatActivity {
         final List<Students> listSV=new ArrayList<Students>();
 
         try {
-            AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
+
+
+           AlertDialog.Builder mBuilder = new AlertDialog.Builder(Dssv.this);
             final View mView = getLayoutInflater().inflate(R.layout.dialog_dssv_import, null);
             mBuilder.setView(mView);
             final AlertDialog dialog = mBuilder.create();
             dialog.show();
+
 
              ListView listSVimprot=(ListView)mView.findViewById(R.id.list_dssv_import);
              ArrayAdapter<String> arrSVImport=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
