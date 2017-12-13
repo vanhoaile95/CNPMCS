@@ -660,7 +660,7 @@ public class MainActivity extends AppCompatActivity {
             FileOutputStream outFile = new FileOutputStream(fileĐiemanh);
             wb.write(outFile);
 
-            Uri selectedUri = Uri.parse(folder+"/"+currentClass+"DiemDanh.xlsx");
+            Uri selectedUri = Uri.parse(folder);
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setDataAndType(selectedUri, "resource/folder");
             startActivity(Intent.createChooser(intent, "Open file"));
