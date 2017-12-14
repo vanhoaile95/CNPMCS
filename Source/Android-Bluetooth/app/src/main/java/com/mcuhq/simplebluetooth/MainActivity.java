@@ -117,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
     private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
     private final static int CONNECTING_STATUS = 3; // used in bluetooth handler to identify message status
+    private final static int DSSV = 10;
+    private final static int LOP = 11;
+
 
     List<Students> listStd = new ArrayList<Students>();
     FeedReaderDbHelper mDbHelper;
@@ -786,15 +789,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent Data){
         // Check which request we're responding to
-        if (requestCode == REQUEST_ENABLE_BT) {
+        if (requestCode == LOP) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-                //mBluetoothStatus.setText("Đã bật");
+                String result= Data.getStringExtra("result");
+                if (!result.isEmpty())
+                {
+                    Reset();
+                    for (int i = 0; i < listStd.size(); i++) {
+                        mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
+                    }
+                    mBTArrayAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(getApplicationContext(),"Đã cập nhập lại lớp học",Toast.LENGTH_SHORT).show();
+                }
+
             }
-            else {
-                //mBluetoothStatus.setText("Đã tắt");
+        }
+        if (requestCode == DSSV)
+        {
+            if (resultCode == RESULT_OK) {
+                String result= Data.getStringExtra("result");
+                if (!result.isEmpty())
+                {
+                    Reset();
+                    for (int i = 0; i < listStd.size(); i++) {
+                        mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
+                    }
+                    mBTArrayAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(getApplicationContext(),"Đã cập nhập lại danh sách ",Toast.LENGTH_SHORT).show();
+                }
+
             }
         }
     }
@@ -831,14 +857,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        try{
-
-            if (mBTAdapter.isDiscovering())
-                mBTAdapter.cancelDiscovery();
-            unregisterReceiver(blReceiver);
-        }
-        catch (Exception e)
-        {}
+        ResetBlueTooth();
         super.onBackPressed();
     }
 
@@ -846,6 +865,7 @@ public class MainActivity extends AppCompatActivity {
     {
         ghiChu.clear();
         numStudent = 0;
+        status.setText("");
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
 
@@ -893,31 +913,31 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void dssv(){
-        Reset();
-        status.setText("");
-
+    public  void ResetBlueTooth()
+    {
+        listStudent.setText("Điểm danh");
         try{
-            if (mBTAdapter.isDiscovering())
-                mBTAdapter.cancelDiscovery();
-            unregisterReceiver(blReceiver);
+
+            if (this.mBTAdapter.isDiscovering())
+                this.mBTAdapter.cancelDiscovery();
+            unregisterReceiver(this.blReceiver);
         }
         catch (Exception e)
         {}
+    }
 
+    private void dssv(){
 
-
+        ResetBlueTooth();
         Intent i = new Intent(MainActivity.this, Dssv.class);
-        MainActivity.this.startActivity(i);
+        MainActivity.this.startActivityForResult(i,DSSV);
     }
 
     private void dsLop()
     {
-        Reset();
-        status.setText("");
 
         Intent i = new Intent(MainActivity.this, DsClass.class);
-        MainActivity.this.startActivity(i);
+        MainActivity.this.startActivityForResult(i,LOP);
     }
 
     private int CheckStudent(String str)

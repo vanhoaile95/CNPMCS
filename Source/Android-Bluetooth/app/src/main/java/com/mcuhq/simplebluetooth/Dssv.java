@@ -1,5 +1,6 @@
 package com.mcuhq.simplebluetooth;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -82,6 +83,10 @@ public class Dssv extends AppCompatActivity {
         setContentView(R.layout.dssv);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent returnIntent_select = new Intent();
+        returnIntent_select.putExtra("result","Success");
+        setResult(Activity.RESULT_OK,returnIntent_select);
+
         mDbHelper = new FeedReaderDbHelper(this);
 
         btnAdd = (Button)findViewById(R.id.btnAdd);
@@ -142,9 +147,9 @@ public class Dssv extends AppCompatActivity {
     {
         try{
 
-            if (mBTAdapter.isDiscovering())
-                mBTAdapter.cancelDiscovery();
-            unregisterReceiver(blReceiver);
+            if (this.mBTAdapter.isDiscovering())
+                this.mBTAdapter.cancelDiscovery();
+            unregisterReceiver(this.blReceiver);
         }
         catch (Exception e)
         {}

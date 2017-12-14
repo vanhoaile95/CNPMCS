@@ -1,5 +1,7 @@
 package com.mcuhq.simplebluetooth;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,10 @@ public class DsClass extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ds_lop);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Intent returnIntent_select = new Intent();
+        returnIntent_select.putExtra("result","Success");
+        setResult(Activity.RESULT_OK,returnIntent_select);
 
         mDbHelper = new FeedReaderDbHelper(this);
 
@@ -91,7 +97,6 @@ public class DsClass extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.updateLop:
                 ShowCustomDialog(1, info.position);
-                //Toast.makeText(getApplicationContext(),"Cập nhật thành công" ,Toast.LENGTH_SHORT).show();
                 break;
             case R.id.delLop:
                 deleteClassRoom(info.position);
