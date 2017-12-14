@@ -1,4 +1,4 @@
-package com.mcuhq.simplebluetooth;
+package com.uit.diemdanhbluetooth;
 
 /**
  * Created by chuong on 10/9/2017.

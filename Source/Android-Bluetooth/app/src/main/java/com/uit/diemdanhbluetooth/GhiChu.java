@@ -1,4 +1,4 @@
-package com.mcuhq.simplebluetooth;
+package com.uit.diemdanhbluetooth;
 
 /**
  * Created by lenovo on 21/11/2017.

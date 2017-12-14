@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mcuhq.simplebluetooth">
+    package="com.uit.diemdanhbluetooth">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -22,7 +22,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.uit.diemdanhbluetooth.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,13 +30,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name= ".Dssv"
+        <activity android:name= "com.uit.diemdanhbluetooth.Dssv"
                 android:label="Danh Sách Sinh Viên"> </activity>
 
-        <activity android:name= ".DsClass"
+        <activity android:name= "com.uit.diemdanhbluetooth.DsClass"
             android:label="Danh Sách Lớp"> </activity>
 
-        <activity android:name= ".HuongDan"
+        <activity android:name= "com.uit.diemdanhbluetooth.HuongDan"
             android:label="Giới thiệu"> </activity>
     </application>
 

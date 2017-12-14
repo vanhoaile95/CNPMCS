@@ -1,4 +1,4 @@
-package com.mcuhq.simplebluetooth;
+package com.uit.diemdanhbluetooth;
 
 import android.provider.BaseColumns;
 

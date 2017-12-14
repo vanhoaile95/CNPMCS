@@ -4,12 +4,17 @@ android {
     compileSdkVersion 23
     buildToolsVersion '26.0.2'
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
-        applicationId "com.mcuhq.simplebluetooth"
+        applicationId "com.uit.diemdanhbluetooth"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {

@@ -1,14 +1,13 @@
-package com.mcuhq.simplebluetooth;
+package com.uit.diemdanhbluetooth;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Switch;
 
-import com.mcuhq.simplebluetooth.FeedReaderContract.FeedEntry;
-import com.mcuhq.simplebluetooth.FeedReaderContract.ClassRoom;
+import com.uit.diemdanhbluetooth.FeedReaderContract.FeedEntry;
+import com.uit.diemdanhbluetooth.FeedReaderContract.ClassRoom;
 
 import java.util.ArrayList;
 import java.util.List;
