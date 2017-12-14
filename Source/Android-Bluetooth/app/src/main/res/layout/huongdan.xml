@@ -84,6 +84,13 @@
                 android:layout_centerHorizontal="true"
                 android:baselineAligned="false"
                 android:src="@drawable/image1" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="201dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:baselineAligned="false"
+                android:src="@drawable/image9" />
             <TextView
                 android:id="@+id/manhinhchinh"
                 android:layout_width="match_parent"
@@ -175,7 +182,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
-                android:text="Từ màn hình chính nhấn vào button DANH SÁCH SINH VIÊN đề vào màn hình quản lí danh sách học viên của lớp đang điểm danh."
+                android:text="Từ màn hình chính nhấn vào button DANH SÁCH SINH VIÊN để vào màn hình quản lí danh sách học viên của lớp đang điểm danh."
                 android:textColor="@color/colorAccent"
                 android:textSize="15dp" />
 
@@ -231,7 +238,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
-                android:text="Nhấn vào button CẤP NHẬT ĐỊA CHỈ BLUETOOTH để cập nhật địa chỉ bluetooth cho từng sinh viên trong danh sách lớp"
+                android:text="Nhấn vào button CẬP NHẬT ĐỊA CHỈ BLUETOOTH để cập nhật địa chỉ bluetooth cho từng sinh viên trong danh sách lớp"
                 android:textColor="@color/colorText"
                 android:textSize="15dp" />
 
@@ -347,7 +354,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
-                android:text="Người dụng bật bluetooth của thiết lên và chọn lớp điểm danh(ở phần quản lí danh sách lớp học) sau đó nhấn nút điểm danh, ứng dụng sẽ quét liên tục tới khi nào người dùng bấm nút điểm danh lần 2."
+                android:text="Người dùng bật bluetooth của thiết lên và chọn lớp điểm danh(ở phần quản lí danh sách lớp học) sau đó nhấn nút điểm danh, ứng dụng sẽ quét liên tục tới khi nào người dùng bấm nút điểm danh lần 2."
                 android:textColor="@color/colorText"
                 android:textSize="15dp" />
             <TextView
@@ -382,7 +389,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="5dp"
                 android:ellipsize="end"
-                android:text="Trong quá trình điểm danh, người dùng có thể thêm ghi chú cho sinh viên bằng cách ấn chọn sinh viên đó trong danh sách ddiemr danh."
+                android:text="Trong quá trình điểm danh, người dùng có thể thêm ghi chú cho sinh viên bằng cách ấn chọn sinh viên đó trong danh sách điểm danh."
                 android:textColor="@color/colorText"
                 android:textSize="15dp" />
 
