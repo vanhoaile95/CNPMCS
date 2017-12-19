@@ -555,8 +555,17 @@ public boolean checkSV(Students std)
                         listAllStd.clear();
                         List<Students> list = mDbHelper.getAllStudents();
                         listAllStd.addAll(list);
+                        int id;
+                        if(mDbHelper.getStudentsCount()==0)
+                        {
+                            id = 1;
+                        }
+                        else
+                        {
+                            id = listAllStd.get(listAllStd.size() - 1).getId() + 1;
+                        }
 
-                        Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() + 1, mssv.getText().toString(), name.getText().toString(),
+                        Students std = new Students(id, mssv.getText().toString(), name.getText().toString(),
                                 MainActivity.currentClass, mac1.getText().toString(), mac2.getText().toString());
                         if(!checkSV(std))
                         {

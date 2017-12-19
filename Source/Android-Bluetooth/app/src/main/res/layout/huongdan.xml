@@ -15,7 +15,7 @@
             <!-- Content here -->
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="201dp"
+                android:layout_height="150dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:baselineAligned="false"

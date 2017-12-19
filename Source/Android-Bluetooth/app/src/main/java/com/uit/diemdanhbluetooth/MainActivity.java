@@ -68,7 +68,7 @@ import jxl.write.WritableWorkbook;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String currentClass = "CNPMCS";
+    public static String currentClass = "";
 
     // GUI Components
     private TextView today;
@@ -144,13 +144,11 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////
         //Create database
         mDbHelper = new FeedReaderDbHelper(this);
-        mDbHelper.createDefault();
+        //mDbHelper.createDefault();
 
         //////////////////////////////////////////////////////////
         List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
-
-
 
 
         dl = (DrawerLayout)findViewById(R.id.dl);
@@ -207,8 +205,10 @@ public class MainActivity extends AppCompatActivity {
         registerForContextMenu(mDevicesListView);
 
         //lớp điểm danh
-        MainActivity.currentClass=mDbHelper.getClassRoomON().getName();
-        lop.setText("Lớp điểm danh: "+ MainActivity.currentClass);
+        if(mDbHelper.getNotesClassRoomCount()!=0) {
+            MainActivity.currentClass = mDbHelper.getClassRoomON().getName();
+            lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
+        }
 
         //Diem danh thu cong
         mDevicesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

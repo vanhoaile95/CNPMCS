@@ -58,7 +58,9 @@ public class DsClass extends AppCompatActivity {
         listClass.setAdapter(listTenClass);
         registerForContextMenu(listClass);
         //
-        tvLopChon.setText("Lớp điểm danh: "+ mDbHelper.getClassRoomON().getName());
+        if(mDbHelper.getNotesClassRoomCount()!=0) {
+            tvLopChon.setText("Lớp điểm danh: " + mDbHelper.getClassRoomON().getName());
+        }
         //load danh sách lớp
         LoadListClass();
 
@@ -99,11 +101,26 @@ public class DsClass extends AppCompatActivity {
                 ShowCustomDialog(1, info.position);
                 break;
             case R.id.delLop:
-                deleteClassRoom(info.position);
+                if(MainActivity.currentClass.equals(listclassRooms.get(info.position).getName()))
+                {
+                    Toast.makeText(getApplicationContext(), "Lớp đang được chọn không thể xóa!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //delete all student of class
+                    List<Students> listStd = new ArrayList<Students>();
+                    List<Students> list = mDbHelper.getListStudents(listclassRooms.get(info.position).getName());
+                    listStd.addAll(list);
+
+                    for (int i = 0; i < listStd.size(); i++) {
+                        mDbHelper.deleteStudent(listStd.get(i).getId());
+                    }
+
+                    deleteClassRoom(listclassRooms.get(info.position).getId());
+                }
                 break;
             case R.id.selectLop:
                 MainActivity.currentClass = listclassRooms.get(info.position).getName();
-                updateClassRoomON(info.position);
+                updateClassRoomON(listclassRooms.get(info.position).getId());
                 break;
         }
 
@@ -182,8 +199,28 @@ public class DsClass extends AppCompatActivity {
     private void addClassRoom(String className)
     {
         try{
-            ClassRooms clr=new ClassRooms(mDbHelper.getNotesClassRoomCount()+1,className,"0");
+            List<ClassRooms> listAllStd = new ArrayList<ClassRooms>();
+            listAllStd.clear();
+            List<ClassRooms> list = mDbHelper.getAllClassRoom();
+            listAllStd.addAll(list);
+            int id;
+            if(mDbHelper.getNotesClassRoomCount()==0)
+            {
+                id = 1;
+            }
+            else
+            {
+                id = listAllStd.get(listAllStd.size() - 1).getId() + 1;
+            }
+
+            ClassRooms clr=new ClassRooms(id, className,"0");
             mDbHelper.addClassRooms(clr);
+            if(mDbHelper.getNotesClassRoomCount()==1)
+            {
+                updateClassRoomON(clr.getId());
+                MainActivity.currentClass = clr.getName();
+                tvLopChon.setText("Lớp điểm danh: " + mDbHelper.getClassRoomON().getName());
+            }
             LoadListClass();
             Toast.makeText(getApplicationContext(), "Thêm thành công", Toast.LENGTH_SHORT).show();
         }
@@ -217,7 +254,7 @@ public class DsClass extends AppCompatActivity {
     {
         try{
 
-            mDbHelper.deleteClassroom(id+1);
+            mDbHelper.deleteClassroom(id);
             LoadListClass();
             Toast.makeText(getApplicationContext(), "Xóa thành công", Toast.LENGTH_SHORT).show();
         }
@@ -232,8 +269,7 @@ public class DsClass extends AppCompatActivity {
     private void updateClassRoomON(int id)
     {
         try{
-            int clrid=listclassRooms.get(id).getId();
-            mDbHelper.updateClassRoomON(clrid);
+            mDbHelper.updateClassRoomON(id);
             LoadListClass();
             Toast.makeText(getApplicationContext(), "Chon thành công", Toast.LENGTH_SHORT).show();
         }

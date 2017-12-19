@@ -295,21 +295,23 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // Duyệt trên con trỏ, và thêm vào danh sách.
-        if (cursor.moveToFirst()) {
-            do {
-                Students note = new Students();
-                note.setId(Integer.parseInt(cursor.getString(0)));
-                note.setMssv(cursor.getString(1));
-                note.setName(cursor.getString(2));
-                note.setClassStd(cursor.getString(3));
-                note.setMac1(cursor.getString(4));
-                note.setMac2(cursor.getString(5));
+        if(cursor.getCount()!=0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Students note = new Students();
+                    note.setId(Integer.parseInt(cursor.getString(0)));
+                    note.setMssv(cursor.getString(1));
+                    note.setName(cursor.getString(2));
+                    note.setClassStd(cursor.getString(3));
+                    note.setMac1(cursor.getString(4));
+                    note.setMac2(cursor.getString(5));
 
-                if(note.getClassStd().equals(_class)) {
-                    // Thêm vào danh sách.
-                    noteList.add(note);
-                }
-            } while (cursor.moveToNext());
+                    if (note.getClassStd().equals(_class)) {
+                        // Thêm vào danh sách.
+                        noteList.add(note);
+                    }
+                } while (cursor.moveToNext());
+            }
         }
 
         // return note list
@@ -326,19 +328,20 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // Duyệt trên con trỏ, và thêm vào danh sách.
-        if (cursor.moveToFirst()) {
-            do {
-                NgayDiemDanh note = new NgayDiemDanh();
-                note.setId(Integer.parseInt(cursor.getString(0)));
-                note.setDay(cursor.getString(1));
-                note.setLan(Integer.parseInt(cursor.getString(2)));
-                note.setLop(cursor.getString(3));
+        if(cursor.getCount()!=0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    NgayDiemDanh note = new NgayDiemDanh();
+                    note.setId(Integer.parseInt(cursor.getString(0)));
+                    note.setDay(cursor.getString(1));
+                    note.setLan(Integer.parseInt(cursor.getString(2)));
+                    note.setLop(cursor.getString(3));
 
-                if(note.getLop().equals(_class))
-                    noteList.add(note);
-            } while (cursor.moveToNext());
+                    if (note.getLop().equals(_class))
+                        noteList.add(note);
+                } while (cursor.moveToNext());
+            }
         }
-
         // return note list
         return noteList;
     }
@@ -353,19 +356,21 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // Duyệt trên con trỏ, và thêm vào danh sách.
-        if (cursor.moveToFirst()) {
-            do {
-                Students note = new Students();
-                note.setId(Integer.parseInt(cursor.getString(0)));
-                note.setMssv(cursor.getString(1));
-                note.setName(cursor.getString(2));
-                note.setClassStd(cursor.getString(3));
-                note.setMac1(cursor.getString(4));
-                note.setMac2(cursor.getString(5));
+        if(cursor.getCount()!=0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    Students note = new Students();
+                    note.setId(Integer.parseInt(cursor.getString(0)));
+                    note.setMssv(cursor.getString(1));
+                    note.setName(cursor.getString(2));
+                    note.setClassStd(cursor.getString(3));
+                    note.setMac1(cursor.getString(4));
+                    note.setMac2(cursor.getString(5));
 
-                // Thêm vào danh sách.
-                noteList.add(note);
-            } while (cursor.moveToNext());
+                    // Thêm vào danh sách.
+                    noteList.add(note);
+                } while (cursor.moveToNext());
+            }
         }
 
         // return note list
@@ -383,19 +388,20 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
 
 
         // Duyệt trên con trỏ, và thêm vào danh sách.
-        if (cursor.moveToFirst()) {
-            do {
-                ClassRooms note = new ClassRooms();
-                note.setId(Integer.parseInt(cursor.getString(0)));
-                note.setName(cursor.getString(1));
-                note.setStatus(cursor.getString(2));
+        if(cursor.getCount()!=0) {
+            if (cursor.moveToFirst()) {
+                do {
+                    ClassRooms note = new ClassRooms();
+                    note.setId(Integer.parseInt(cursor.getString(0)));
+                    note.setName(cursor.getString(1));
+                    note.setStatus(cursor.getString(2));
 
 
-                // Thêm vào danh sách.
-                noteList.add(note);
-            } while (cursor.moveToNext());
+                    // Thêm vào danh sách.
+                    noteList.add(note);
+                } while (cursor.moveToNext());
+            }
         }
-
         // return note list
         return noteList;
     }
@@ -500,16 +506,8 @@ public class FeedReaderDbHelper extends SQLiteOpenHelper {
     public void deleteClassroom(int id) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(ClassRoom.COLUMN_CLASSSTATUS, "2");//status=2~ xóa, 1~đang điểm danh, 0~binhf thường
-
-
-
-        db.update(ClassRoom.TABLE_NAME, values, ClassRoom.COLUMN_ID+ " = ?",
-                new String[]{String.valueOf(id)});
-
+        db.delete(ClassRoom.TABLE_NAME, ClassRoom.COLUMN_ID + " = ?",
+                new String[] { String.valueOf(id) });
         db.close();
     }
 }

@@ -24,7 +24,7 @@
     <string name="importExcel">Nhập từ file excel</string>
     <string name="exportExcel">Xuất ra file excel</string>
 
-    <string name="saveNotif">Vui lòng điểm danh trước khi lưu</string>
+    <string name="saveNotif">Danh sách sinh viên rỗng!</string>
     <string name="saveSuccess">Lưu kết quả điểm danh lần %1$d thành công</string>
     <string name="count">Điểm danh lần: %1$d</string>
     <string name="numStudent">Có mặt %1$d/%2$d sinh viên</string>
