@@ -33,4 +33,25 @@
     <string name="ghichu">Thêm ghi chú</string>
     <string name="Open">iBluetooth</string>
     <string name="Close">iBluetooth</string>
+
+
+    <string name="next">TIẾP THEO</string>
+    <string name="skip">BỎ QUA</string>
+    <string name="start">ĐÃ HIỂU</string>
+
+    <string name="slide_1_title">Xin Chào Bạn</string>
+    <string name="slide_1_desc">Đây là ứng dụng giúp các thầy cô điểm danh sinh viên bằng bluetooth nhanh chóng, hiệu quả so với cách
+                                 điểm danh truyền thống.</string>
+
+    <string name="slide_2_title">Quản Lý Lớp Học</string>
+    <string name="slide_2_desc">Việc đầu tiên bạn phải làm là tạo lớp học mới, tại đây bạn có thể xóa, sửa
+                                 và chọn lớp để điểm danh.</string>
+
+    <string name="slide_3_title">Quản Lý Sinh Viên</string>
+    <string name="slide_3_desc">Tiếp theo là thêm sinh viên thủ công hoặc bằng file
+                             excel có sẳn, xóa và sửa thông tin sinh viên. Sau đó nhấn vào Cập nhật địa chỉ mac.</string>
+
+    <string name="slide_4_title">Điểm Danh + Xuất Excel</string>
+    <string name="slide_4_desc">Nhấn vào Điểm Danh để tiến hành điểm danh tự động hoặc điểm danh thủ công. Sau đó lưu kết
+                                quả và xuất ra file excel.</string>
 </resources>

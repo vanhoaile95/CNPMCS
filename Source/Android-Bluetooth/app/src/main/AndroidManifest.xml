@@ -9,7 +9,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <permission android:name="android.permission.BLUETOOTH" android:label="BLUETOOTH" />
+    <permission
+        android:name="android.permission.BLUETOOTH"
+        android:label="BLUETOOTH" />
     <permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -22,22 +24,30 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.uit.diemdanhbluetooth.MainActivity">
+        <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppThemeMain"></activity>
+        <activity
+            android:name=".Dssv"
+            android:label="Danh Sách Sinh Viên"
+            android:theme="@style/AppThemeMain"></activity>
+        <activity
+            android:name=".DsClass"
+            android:label="Danh Sách Lớp"
+            android:theme="@style/AppThemeMain"></activity>
+        <activity
+            android:name=".HuongDan"
+            android:label="Giới thiệu"
+            android:theme="@style/AppThemeMain"></activity>
 
-        <activity android:name= "com.uit.diemdanhbluetooth.Dssv"
-                android:label="Danh Sách Sinh Viên"> </activity>
-
-        <activity android:name= "com.uit.diemdanhbluetooth.DsClass"
-            android:label="Danh Sách Lớp"> </activity>
-
-        <activity android:name= "com.uit.diemdanhbluetooth.HuongDan"
-            android:label="Giới thiệu"> </activity>
     </application>
 
 </manifest>

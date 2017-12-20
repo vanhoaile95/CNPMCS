@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> fileList = new ArrayList<String>();
     String excelFile;
 
+    private Boolean exit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,7 +177,8 @@ public class MainActivity extends AppCompatActivity {
                 else if (id == R.id.gioithieu)
                 {
                     dl.closeDrawers();
-                    Intent i = new Intent(MainActivity.this, HuongDan.class);
+                    WelcomeActivity.isMenuCall = true;
+                    Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
                     MainActivity.this.startActivity(i);
                 }
 
@@ -396,6 +398,26 @@ public class MainActivity extends AppCompatActivity {
         count.setText(getString(R.string.count,countValue));
 
         numStudent = 0;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (exit) {
+            WelcomeActivity.isMenuCall = false;
+            finish(); // finish activity
+        } else {
+            Toast.makeText(this, "Nhấn Back lần nữa để thoát ứng dụng",
+                    Toast.LENGTH_SHORT).show();
+            exit = true;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    exit = false;
+                }
+            }, 3 * 1000);
+
+        }
+
     }
 
     @Override
@@ -839,11 +861,11 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    public void onBackPressed() {
-        ResetBlueTooth();
-        super.onBackPressed();
-    }
+    //@Override
+    //public void onBackPressed() {
+    //    ResetBlueTooth();
+    //    super.onBackPressed();
+    //}
 
     private void Reset()
     {
