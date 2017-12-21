@@ -176,8 +176,8 @@ public class Dssv extends AppCompatActivity {
                         if ( listStd.get(i).getMac1().isEmpty() && !deviceAddress.equals(listStd.get(i).getMac2())) {
 
                             listStd.get(i).setMac1(deviceAddress);
-                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
-                                    , listStd.get(i).getMac1().toString(), listStd.get(i).getMac2().toString());
+                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv(), listStd.get(i).getName()
+                                    , deviceAddress, listStd.get(i).getMac2());
                             mDbHelper.updateStudent(std);
                             LoadData();
                             Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();
@@ -187,8 +187,8 @@ public class Dssv extends AppCompatActivity {
                         else if (listStd.get(i).getMac2().isEmpty() && !deviceAddress.equals(listStd.get(i).getMac1())) {
 
                             listStd.get(i).setMac2(deviceAddress);
-                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv().toString(), listStd.get(i).getName().toString()
-                                    , listStd.get(i).getMac1().toString(), listStd.get(i).getMac2().toString());
+                            Students std = new Students(listStd.get(i).getId(), listStd.get(i).getMssv(), listStd.get(i).getName()
+                                    , listStd.get(i).getMac1(), deviceAddress);
                             mDbHelper.updateStudent(std);
                             LoadData();
                             Toast.makeText(getApplicationContext(), "Cập nhập Mac2 " + listStd.get(i).getName(), Toast.LENGTH_SHORT).show();

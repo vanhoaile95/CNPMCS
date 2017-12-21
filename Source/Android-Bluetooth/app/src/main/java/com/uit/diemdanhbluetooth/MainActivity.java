@@ -39,6 +39,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gigamole.library.PulseView;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -68,7 +70,7 @@ import jxl.write.WritableWorkbook;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String currentClass = "";
+    public static String currentClass = "CNPMCS";
 
     // GUI Components
     private TextView today;
@@ -76,15 +78,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView count;
     public static TextView lop;
     private Switch diemDanhThuCong;
-    private Button dsLop;
-    private Button dssv;
     private Button listStudent;
-    private Button btnSave;
     private  BluetoothAdapter mBTAdapter;
     private ArrayAdapter<String> mBTArrayAdapter;
     private ListView mDevicesListView;
     private DrawerLayout dl;
     private ActionBarDrawerToggle abdt;
+    private PulseView pulseView;
 
 
     //Search
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////
         //Create database
         mDbHelper = new FeedReaderDbHelper(this);
-        //mDbHelper.createDefault();
+        mDbHelper.createDefault();
 
         //////////////////////////////////////////////////////////
         List<Students> list = mDbHelper.getListStudents(currentClass);
@@ -156,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
         abdt = new ActionBarDrawerToggle(this ,dl,R.string.Open,R.string.Close);
         abdt.setDrawerIndicatorEnabled(true);
         dl.addDrawerListener(abdt);
+        pulseView = (PulseView)findViewById(R.id.pv);
 
 
         NavigationView nav_view = (NavigationView)findViewById(R.id.nav_view);
@@ -190,11 +191,9 @@ public class MainActivity extends AppCompatActivity {
         today = (TextView)findViewById(R.id.today);
         status = (TextView)findViewById(R.id.status);
         diemDanhThuCong = (Switch) findViewById(R.id.manual);
-        dssv = (Button)findViewById(R.id.dssv);
-        dsLop=(Button)findViewById(R.id.btndsLop);
         lop=(TextView)findViewById(R.id.tbTenLop);
         listStudent = (Button)findViewById(R.id.listStudent);
-        btnSave = (Button)findViewById(R.id.save);
+        listStudent.setText("Điểm danh");
 
 
         mBTArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_checked);
@@ -209,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
         //lớp điểm danh
         if(mDbHelper.getNotesClassRoomCount()!=0) {
             MainActivity.currentClass = mDbHelper.getClassRoomON().getName();
-            lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
+            lop.setText(MainActivity.currentClass);
         }
 
         //Diem danh thu cong
@@ -283,97 +282,21 @@ public class MainActivity extends AppCompatActivity {
         //Today is a good day
         Calendar calendar = Calendar.getInstance();
         strToday = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH))+ "-" +String.valueOf(calendar.get(Calendar.MONTH) + 1) + "-" +
-                String.valueOf(calendar.get(Calendar.YEAR) + " ");
+                String.valueOf(calendar.get(Calendar.YEAR) + " ").substring(2,4);
         today.setText(strToday);
-
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mBTArrayAdapter.getCount()==0)
-                {
-                    Toast.makeText(getApplicationContext(), getString(R.string.saveNotif), Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    //Save day
-                    List<NgayDiemDanh> arrDays = new ArrayList<NgayDiemDanh>();
-                    List<NgayDiemDanh> listDays = mDbHelper.getAllDays(currentClass);
-                    arrDays.addAll(listDays);
-                    int num = 0;
-
-                    for(int i=0;i<arrDays.size();i++)
-                    {
-                        if(arrDays.get(i).getDay().equals(strToday))
-                        {
-                            pos = i;
-                            num++;
-                        }
-                    }
-
-                    if(num==0) {
-                        NgayDiemDanh day = new NgayDiemDanh(mDbHelper.getDayCount()+1, strToday, 1, currentClass);
-                        mDbHelper.addDay(day);
-                    }
-                    else
-                    {
-                        NgayDiemDanh day = new NgayDiemDanh(arrDays.get(pos).getId(), strToday, arrDays.get(pos).getLan()+1, currentClass);
-                        mDbHelper.updateDay(day);
-                    }
-                    ///////////////////////////////////////////////////////////////
-                    //Save data
-                    for(int i=0;i<listStd.size();i++)
-                    {
-                        if(listStd.get(i).isActive()==true)
-                        {
-                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount()+1, listStd.get(i).getId(), strToday, countValue, "x");
-                            mDbHelper.addDiemDanh(dd);
-                        }
-                        else
-                        {
-                            String noiDung = "";
-                            for(int k=0;k<ghiChu.size();k++)
-                            {
-                                if(ghiChu.get(k).getId()==i)
-                                {
-                                    noiDung = ghiChu.get(k).getNoiDung();
-                                }
-                            }
-                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount()+1, listStd.get(i).getId(), strToday, countValue, noiDung);
-                            mDbHelper.addDiemDanh(dd);
-                        }
-                    }
-
-                    Toast.makeText(getApplicationContext(),  getString(R.string.saveSuccess, countValue), Toast.LENGTH_SHORT).show();
-
-                    countValue++;
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putInt("Count", countValue);
-                    editor.commit();
-                    count.setText(getString(R.string.count, countValue));
-                    Reset();
-                }
-            }
-        });
 
         listStudent.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if (listStudent.getText().equals("Điểm danh"))
+                pulseView.startPulse();
+                else
+                pulseView.finishPulse();
                 listStudent(v);
             }
         });
 
-        dssv.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                dssv();
-            }
-        });
 
-        dsLop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dsLop();
-            }
-        });
 
         editMsssv.addTextChangedListener(new TextWatcher() {
             @Override
@@ -384,6 +307,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mBTArrayAdapter.getFilter().filter(charSequence);
+
             }
 
             @Override
@@ -394,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        status.setText("");
+        status.setText(getString(R.string.numStudent, numStudent, listStd.size()));
         count.setText(getString(R.string.count,countValue));
 
         numStudent = 0;
@@ -404,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (exit) {
             WelcomeActivity.isMenuCall = false;
+            ResetBlueTooth();
             finish(); // finish activity
         } else {
             Toast.makeText(this, "Nhấn Back lần nữa để thoát ứng dụng",
@@ -769,9 +694,60 @@ public class MainActivity extends AppCompatActivity {
             case R.id.exportExcelNew:
                 ExportExcel();
                 return true;
-            case R.id.huongdan:
-                Intent i = new Intent(MainActivity.this, HuongDan.class);
-                MainActivity.this.startActivity(i);
+            case R.id.save:
+
+                if(mBTArrayAdapter.getCount()==0)
+                {
+                    Toast.makeText(getApplicationContext(), getString(R.string.saveNotif), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //Save day
+                    List<NgayDiemDanh> arrDays = new ArrayList<NgayDiemDanh>();
+                    List<NgayDiemDanh> listDays = mDbHelper.getAllDays(currentClass);
+                    arrDays.addAll(listDays);
+                    int num = 0;
+
+                    for (int i = 0; i < arrDays.size(); i++) {
+                        if (arrDays.get(i).getDay().equals(strToday)) {
+                            pos = i;
+                            num++;
+                        }
+                    }
+
+                    if (num == 0) {
+                        NgayDiemDanh day = new NgayDiemDanh(mDbHelper.getDayCount() + 1, strToday, 1, currentClass);
+                        mDbHelper.addDay(day);
+                    } else {
+                        NgayDiemDanh day = new NgayDiemDanh(arrDays.get(pos).getId(), strToday, arrDays.get(pos).getLan() + 1, currentClass);
+                        mDbHelper.updateDay(day);
+                    }
+                    ///////////////////////////////////////////////////////////////
+                    //Save data
+                    for (int i = 0; i < listStd.size(); i++) {
+                        if (listStd.get(i).isActive() == true) {
+                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount() + 1, listStd.get(i).getId(), strToday, countValue, "x");
+                            mDbHelper.addDiemDanh(dd);
+                        } else {
+                            String noiDung = "";
+                            for (int k = 0; k < ghiChu.size(); k++) {
+                                if (ghiChu.get(k).getId() == i) {
+                                    noiDung = ghiChu.get(k).getNoiDung();
+                                }
+                            }
+                            DiemDanh dd = new DiemDanh(mDbHelper.getDiemDanhCount() + 1, listStd.get(i).getId(), strToday, countValue, noiDung);
+                            mDbHelper.addDiemDanh(dd);
+                        }
+                    }
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.saveSuccess, countValue), Toast.LENGTH_SHORT).show();
+
+                    countValue++;
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putInt("Count", countValue);
+                    editor.commit();
+                    count.setText(getString(R.string.count, countValue));
+                    Reset();
+                }
                 return true;
 
             default:
@@ -802,17 +778,18 @@ public class MainActivity extends AppCompatActivity {
                 if (!result.isEmpty())
                 {
                     Reset();
+
                     for (int i = 0; i < listStd.size(); i++) {
                         mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
                     }
                     mBTArrayAdapter.notifyDataSetChanged();
-
                     Toast.makeText(getApplicationContext(),"Đã cập nhập lại lớp học",Toast.LENGTH_SHORT).show();
                 }
 
             }
         }
-        if (requestCode == DSSV)
+
+        else if (requestCode == DSSV)
         {
             if (resultCode == RESULT_OK) {
                 String result= Data.getStringExtra("result");
@@ -823,7 +800,6 @@ public class MainActivity extends AppCompatActivity {
                         mBTArrayAdapter.add(listStd.get(i).getMssv() + "     " + listStd.get(i).getName());
                     }
                     mBTArrayAdapter.notifyDataSetChanged();
-
                     Toast.makeText(getApplicationContext(),"Đã cập nhập lại danh sách ",Toast.LENGTH_SHORT).show();
                 }
 
@@ -861,19 +837,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    //@Override
-    //public void onBackPressed() {
-    //    ResetBlueTooth();
-    //    super.onBackPressed();
-    //}
 
     private void Reset()
     {
         ghiChu.clear();
         numStudent = 0;
-        status.setText("");
         listStd.clear();
         mBTArrayAdapter.clear(); // clear items
+
+
 
         List<Students> list = mDbHelper.getListStudents(currentClass);
         listStd.addAll(list);
@@ -894,6 +866,7 @@ public class MainActivity extends AppCompatActivity {
             }
             mBTArrayAdapter.notifyDataSetChanged();
         }
+
 
 
 
@@ -952,6 +925,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i=0;i<listStd.size();i++) {
             if(str.equals(listStd.get(i).getMac1()) || str.equals(listStd.get(i).getMac2()))
             {
+                if (listStd.get(i).isActive() == false)
                 ck = i;
             }
         }

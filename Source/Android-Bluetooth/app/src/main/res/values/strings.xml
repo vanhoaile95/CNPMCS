@@ -8,8 +8,8 @@
     <string name="classRoom">Lớp điểm danh: </string>
     <string name="diemdanh">Điểm danh</string>
     <string name="save">Lưu kết quả</string>
-    <string name="inputId">Nhập mã số...</string>
-    <string name="manual">  | Điểm danh thủ công     </string>
+    <string name="inputId">Nhập mã số........</string>
+    <string name="manual">Điểm danh thủ công     </string>
 
     <string name="id">Mã số sinh viên</string>
     <string name="tenLop">Tên lớp</string>
@@ -26,8 +26,8 @@
 
     <string name="saveNotif">Danh sách sinh viên rỗng!</string>
     <string name="saveSuccess">Lưu kết quả điểm danh lần %1$d thành công</string>
-    <string name="count">Điểm danh lần: %1$d</string>
-    <string name="numStudent">Có mặt %1$d/%2$d sinh viên</string>
+    <string name="count">%1$d</string>
+    <string name="numStudent">%1$d/%2$d</string>
 
     <string name="exportSuccess">Xuất dữ liệu thành công</string>
     <string name="ghichu">Thêm ghi chú</string>

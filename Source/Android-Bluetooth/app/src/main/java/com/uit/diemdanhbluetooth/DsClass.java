@@ -72,7 +72,7 @@ public class DsClass extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
-                MainActivity.lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
+                MainActivity.lop.setText(MainActivity.currentClass);
                 this.finish();
                 return true;
             default:
@@ -82,7 +82,7 @@ public class DsClass extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        MainActivity.lop.setText("Lớp điểm danh: " + MainActivity.currentClass);
+        MainActivity.lop.setText(MainActivity.currentClass);
         this.finish();
     }
 

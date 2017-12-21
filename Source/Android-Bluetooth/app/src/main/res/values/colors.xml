@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00a3ed</color>
-    <color name="colorPrimaryDark">#79c1ec</color>
+    <color name="colorPrimary">#09c6df</color>
+    <color name="colorPrimaryDark">#292b3d</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGioiThieu">#405dff</color>
     <color name="colorText">#010620</color>
+    <color name="startblue">#09c6df</color>
+    <color name="endblue">#0bcce6</color>
+    <color name="graylight">#fafafa</color>
 
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>

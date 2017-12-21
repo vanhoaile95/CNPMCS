@@ -4,7 +4,6 @@
         android:title="Xuất file Excel có sẳn"/>
     <item android:id="@+id/exportExcelNew"
         android:title="Xuất file Excel mới"/>
-    <item android:id="@+id/huongdan"
-        android:visible="false"
-        android:title="Giới thiệu"/>
+    <item android:id="@+id/save"
+        android:title="Lưu kết quả"/>
 </menu>
