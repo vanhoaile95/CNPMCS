@@ -402,8 +402,17 @@ public class Dssv extends AppCompatActivity {
                 listAllStd.clear();
                 List<Students> list = mDbHelper.getAllStudents();
                 listAllStd.addAll(list);
+                int id;
+                if(mDbHelper.getStudentsCount()==0)
+                {
+                    id = 1;
+                }
+                else
+                {
+                    id = listAllStd.get(listAllStd.size() - 1).getId() + 1;
+                }
 
-                Students std = new Students(listAllStd.get(listAllStd.size() - 1).getId() +listSV.size()+ 1, mssv, name, MainActivity.currentClass);
+                Students std = new Students(id + listSV.size(), mssv, name, MainActivity.currentClass);
                 listSV.add(std);
                 countSVImprot.setText("Số Sinh Viên: "+listSV.size());
 
@@ -562,7 +571,7 @@ public boolean checkSV(Students std)
                         }
                         else
                         {
-                            id = listAllStd.get(listAllStd.size() - 1).getId() + 1;
+                           id = listAllStd.get(listAllStd.size() - 1).getId() + 1;
                         }
 
                         Students std = new Students(id, mssv.getText().toString(), name.getText().toString(),

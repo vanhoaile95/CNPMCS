@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         ///////////////////////////////////////////////////////
         //Create database
         mDbHelper = new FeedReaderDbHelper(this);
-        mDbHelper.createDefault();
+        //mDbHelper.createDefault();
 
         //////////////////////////////////////////////////////////
         List<Students> list = mDbHelper.getListStudents(currentClass);
