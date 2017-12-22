@@ -14,216 +14,227 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/graylight">
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-        <!--Top Component-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp">
-
-            <!--Top Background-->
             <LinearLayout
-                android:background="@drawable/gradientbackground"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.gigamole.library.PulseView
-                    android:layout_marginTop = "0dp"
-                    android:id = "@+id/pv"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:pv_alpha="100"
-                    app:pv_color="#FFF"
-                    app:pv_icon="@drawable/ibluetooth"
-                    app:pv_icon_height="73dp"
-                    app:pv_icon_width="101dp"
-                    app:pv_measure="height"
-                    app:pv_spawn_period="500"
-                    app:pv_interpolator="@android:anim/linear_interpolator"
-                    />
+                    android:layout_height="200dp">
 
-            </LinearLayout>
-            <!--Top Infomation-->
-            <android.support.v7.widget.CardView
+                    <!--Top Background-->
+                    <LinearLayout
+                        android:background="@drawable/gradientbackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:orientation="vertical">
 
-                app:cardCornerRadius="40dp"
-                android:layout_width="300dp"
-                android:layout_height="120dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="120dp">
+                        <com.gigamole.library.PulseView
+                            android:layout_marginTop = "0dp"
+                            android:id = "@+id/pv"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:pv_alpha="100"
+                            app:pv_color="#FFF"
+                            app:pv_icon="@drawable/ibluetooth"
+                            app:pv_icon_height="73dp"
+                            app:pv_icon_width="101dp"
+                            app:pv_measure="height"
+                            app:pv_spawn_period="500"
+                            app:pv_interpolator="@android:anim/linear_interpolator"
+                            />
+
+                    </LinearLayout>
+                    <!--Top Infomation-->
+                    <android.support.v7.widget.CardView
+
+                        app:cardCornerRadius="40dp"
+                        android:layout_width="300dp"
+                        android:layout_height="120dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="120dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="4">
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Lớp"
+                                    android:textSize="15sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/tbTenLop"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text=""
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:paddingTop="10dp"
+                                    android:textColor="@color/startblue"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Có mặt"
+                                    android:textSize="15sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/status"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0/20"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:paddingTop="10dp"
+                                    android:textColor="@color/startblue"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Lần"
+                                    android:textSize="15sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:paddingTop="10dp"
+                                    android:textColor="@color/startblue"
+                                    />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="match_parent">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ngày"
+                                    android:textSize="15sp"
+                                    />
+                                <TextView
+                                    android:id="@+id/today"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="23/12/17"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"
+                                    android:paddingTop="10dp"
+                                    android:textColor="@color/startblue"
+                                    />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+                <!--End Component-->
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:weightSum="4">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_width="400dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="1dp"
+                    android:orientation="vertical">
 
+                    <!--Search bar-->
                     <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
+
+                        android:focusableInTouchMode="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:paddingLeft="15dp"
+                            android:id="@+id/editMssv"
+                            android:layout_width="131dp"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="@string/inputId"
+                            android:inputType="number"
+                            android:maxLength="8"/>
+
+                        <Switch
+                            android:paddingLeft="50dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Lớp"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:id="@+id/tbTenLop"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:paddingTop="10dp"
+                            android:text="@string/manual"
+                            android:textSize="15dp"
                             android:textColor="@color/startblue"
-                            />
+                            android:id="@+id/manual"/>
+
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Có mặt"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:id="@+id/status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="0/20"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:paddingTop="10dp"
-                            android:textColor="@color/startblue"
-                            />
-                    </LinearLayout>
 
                     <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_marginTop="1dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Lần"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:id="@+id/count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:paddingTop="10dp"
-                            android:textColor="@color/startblue"
-                            />
+
+                        <ListView
+                            android:layout_width="match_parent"
+                            android:layout_height="260dp"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:id="@+id/devicesListView" />
+
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Ngày"
-                            android:textSize="15sp"
-                            />
-                        <TextView
-                            android:id="@+id/today"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="23/12/17"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:paddingTop="10dp"
-                            android:textColor="@color/startblue"
-                            />
-                    </LinearLayout>
 
 
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
 
-        </RelativeLayout>
-
-        <!--End Component-->
-        <LinearLayout
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="1dp"
-            android:orientation="vertical">
-
-            <!--Search bar-->
-            <LinearLayout
-
-                android:focusableInTouchMode="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:paddingLeft="15dp"
-                    android:id="@+id/editMssv"
-                    android:layout_width="131dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/inputId"
-                    android:inputType="number"
-                    android:maxLength="8"/>
-
-                <Switch
-                    android:paddingLeft="50dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/manual"
-                    android:textSize="15dp"
-                    android:textColor="@color/startblue"
-                    android:id="@+id/manual"/>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_marginTop="1dp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ListView
+                <Button
+                    android:id="@+id/listStudent"
+                    android:textColor="#fff"
+                    android:background="@drawable/buttonstylegradient"
+                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="260dp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:id="@+id/devicesListView" />
+                    android:layout_height="wrap_content"
+                    android:text="Điểm danh" />
 
             </LinearLayout>
-
-
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/listStudent"
-            android:textColor="#fff"
-            android:background="@drawable/buttonstylegradient"
-            android:layout_marginTop="0dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Điểm danh" />
+        </ScrollView>
+        <!--Top Component-->
 
 
 

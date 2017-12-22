@@ -8,31 +8,41 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     >
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        android:id="@+id/tbTenLopDangChon"
-        android:text=""
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tbTenLopDangChon"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
+                android:textStyle="bold" />
 
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="460dp"
-        android:id="@+id/listClass"/>
+            <ListView
+                android:id="@+id/listClass"
+                android:layout_width="match_parent"
+                android:layout_height="460dp" />
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnAddClass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm lớp học"
-        android:textColor="#FFFF"
-        android:backgroundTint="@color/colorPrimary"
-        >
-    </android.support.v7.widget.AppCompatButton>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnAddClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="Thêm lớp học"
+                android:textColor="#FFFF"></android.support.v7.widget.AppCompatButton>
+        </LinearLayout>
+    </ScrollView>
+
+
 
 </LinearLayout>

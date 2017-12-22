@@ -9,42 +9,54 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     >
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="380dp"
+                android:id="@+id/listStudent"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm sinh viên"
+                android:textColor="#FFFF"
+                android:backgroundTint="@color/colorPrimary"
+                >
+            </android.support.v7.widget.AppCompatButton>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnAddExcel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Thêm sinh viên từ Excel"
+                android:textColor="#FFFF"
+                android:backgroundTint="@color/colorPrimary"
+                >
+            </android.support.v7.widget.AppCompatButton>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/capNhatDiaChiMac"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cập nhập địa chỉ MAC"
+                android:textColor="#FFFF"
+                android:backgroundTint="@color/colorPrimary"
+                >
+            </android.support.v7.widget.AppCompatButton>
+
+        </LinearLayout>
+    </ScrollView>
 
 
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:id="@+id/listStudent"/>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm sinh viên"
-        android:textColor="#FFFF"
-        android:backgroundTint="@color/colorPrimary"
-        >
-    </android.support.v7.widget.AppCompatButton>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/btnAddExcel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Thêm sinh viên từ Excel"
-        android:textColor="#FFFF"
-        android:backgroundTint="@color/colorPrimary"
-        >
-    </android.support.v7.widget.AppCompatButton>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/capNhatDiaChiMac"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Cập nhập địa chỉ MAC"
-        android:textColor="#FFFF"
-        android:backgroundTint="@color/colorPrimary"
-        >
-    </android.support.v7.widget.AppCompatButton>
 
 </LinearLayout>
