@@ -70,7 +70,7 @@ import jxl.write.WritableWorkbook;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String currentClass = "CNPMCS";
+    public static String currentClass;
 
     // GUI Components
     private TextView today;
@@ -168,16 +168,19 @@ public class MainActivity extends AppCompatActivity {
                 if (id == R.id.LopHoc)
                 {
                     dl.closeDrawers();
+
                     dsLop();
                 }
                 else if (id == R.id.SinhVien)
                 {
                     dl.closeDrawers();
+                    pulseView.finishPulse();
                     dssv();
                 }
                 else if (id == R.id.gioithieu)
                 {
                     dl.closeDrawers();
+
                     WelcomeActivity.isMenuCall = true;
                     Intent i = new Intent(MainActivity.this, WelcomeActivity.class);
                     MainActivity.this.startActivity(i);
@@ -288,10 +291,6 @@ public class MainActivity extends AppCompatActivity {
         listStudent.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if (listStudent.getText().equals("Điểm danh"))
-                pulseView.startPulse();
-                else
-                pulseView.finishPulse();
                 listStudent(v);
             }
         });
@@ -875,6 +874,7 @@ public class MainActivity extends AppCompatActivity {
             unregisterReceiver(blReceiver);
             Toast.makeText(getApplicationContext(),"Đã dừng quét",Toast.LENGTH_SHORT).show();
             listStudent.setText("Điểm danh");
+            pulseView.finishPulse();
         }
         else
         {
@@ -883,6 +883,7 @@ public class MainActivity extends AppCompatActivity {
                 mBTAdapter.startDiscovery();
                 Toast.makeText(getApplicationContext(), "Bắt đầu quét", Toast.LENGTH_SHORT).show();
                 listStudent.setText("Dừng điểm danh");
+                pulseView.startPulse();
                 registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
                 registerReceiver(blReceiver, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
             }

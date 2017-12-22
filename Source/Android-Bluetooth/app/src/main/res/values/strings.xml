@@ -49,8 +49,9 @@
 
     <string name="slide_3_title">Quản Lý Sinh Viên</string>
     <string name="slide_3_desc">Tiếp theo là thêm sinh viên thủ công hoặc bằng file
-                             excel có sẳn, xóa và sửa thông tin sinh viên. Sau đó nhấn vào Cập nhật địa chỉ mac.</string>
-
+                             excel có sẳn, xóa và sửa thông tin sinh viên. Sau đó nhấn vào Cập nhật địa chỉ mac.
+        </string>
+    <string name="slide_3_desc_1">Lưu ý : tên thiết bị bluetooth của sinh viên phải trùng với mã số sinh viên</string>
     <string name="slide_4_title">Điểm Danh + Xuất Excel</string>
     <string name="slide_4_desc">Nhấn vào Điểm Danh để tiến hành điểm danh tự động hoặc điểm danh thủ công. Sau đó lưu kết
                                 quả và xuất ra file excel.</string>
