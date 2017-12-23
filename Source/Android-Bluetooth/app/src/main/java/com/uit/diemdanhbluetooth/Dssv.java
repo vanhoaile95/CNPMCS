@@ -169,8 +169,8 @@ public class Dssv extends AppCompatActivity {
 
 
                 for(int i=0;i<listStd.size();i++) {
-
-                    if (deviceName.contains(listStd.get(i).getMssv()))
+                    //Toast.makeText(getApplicationContext(), "Cập nhập Mac1 " + deviceName, Toast.LENGTH_SHORT).show();
+                    if (deviceName!=null && deviceName.contains((listStd.get(i).getMssv()==null)?"":listStd.get(i).getMssv()))
                     {
                             //Nếu Mac1 ko có và device address khác Mac2
                         if ( listStd.get(i).getMac1().isEmpty() && !deviceAddress.equals(listStd.get(i).getMac2())) {
