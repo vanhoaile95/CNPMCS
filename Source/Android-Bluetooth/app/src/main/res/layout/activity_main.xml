@@ -43,7 +43,7 @@
                             app:pv_color="#FFF"
                             app:pv_icon="@drawable/ibluetooth"
                             app:pv_icon_height="73dp"
-                            app:pv_icon_width="101dp"
+                            app:pv_icon_width="90dp"
                             app:pv_measure="height"
                             app:pv_spawn_period="500"
                             app:pv_interpolator="@android:anim/linear_interpolator"
